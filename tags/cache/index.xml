@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>cache on Strongly Branched</title>
-    <link>http://stronglybranched.io/tags/cache/</link>
+    <link>https://stronglybranched.io/tags/cache/</link>
     <description>Recent content in cache on Strongly Branched</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>©2019</copyright>
     <lastBuildDate>Wed, 20 Nov 2019 00:48:53 +0100</lastBuildDate>
     
-	<atom:link href="http://stronglybranched.io/tags/cache/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://stronglybranched.io/tags/cache/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Netscaler 11 content switching caching issue</title>
-      <link>http://stronglybranched.io/2019/11/netscaler-11-content-switching-caching-issue/</link>
+      <link>https://stronglybranched.io/2019/11/netscaler-11-content-switching-caching-issue/</link>
       <pubDate>Wed, 20 Nov 2019 00:48:53 +0100</pubDate>
       
-      <guid>http://stronglybranched.io/2019/11/netscaler-11-content-switching-caching-issue/</guid>
+      <guid>https://stronglybranched.io/2019/11/netscaler-11-content-switching-caching-issue/</guid>
       <description>TL;DR: Netscalers have an Integrated Cache feature which can cache files even if not licensed. The cache can store corrupted or outdated files. The only way I found to clear the cache in this situation is with an HA failover or a reboot.
  I recently had an interesting issue to troubleshoot: A client was having issues with specifically the Outlook Web Access (OWA) on their Exchange servers, but only when accessed from the internet.</description>
     </item>

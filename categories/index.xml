@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Strongly Branched</title>
-    <link>http://stronglybranched.io/categories/</link>
+    <link>https://stronglybranched.io/categories/</link>
     <description>Recent content in Categories on Strongly Branched</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>©2019</copyright>
     <lastBuildDate>Wed, 20 Nov 2019 00:48:53 +0100</lastBuildDate>
     
-	<atom:link href="http://stronglybranched.io/categories/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://stronglybranched.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>troubleshooting</title>
-      <link>http://stronglybranched.io/categories/troubleshooting/</link>
+      <link>https://stronglybranched.io/categories/troubleshooting/</link>
       <pubDate>Wed, 20 Nov 2019 00:48:53 +0100</pubDate>
       
-      <guid>http://stronglybranched.io/categories/troubleshooting/</guid>
+      <guid>https://stronglybranched.io/categories/troubleshooting/</guid>
       <description></description>
     </item>
     
