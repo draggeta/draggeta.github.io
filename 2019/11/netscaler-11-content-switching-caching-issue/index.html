@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    
+    
+
+
+    <head>
+    <link href="https://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Cache-Control" content="public" />
+<!-- Enable responsiveness on mobile devices -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.60.0" />
+
+    
+    
+    
+
+<title>Netscaler 11 content switching caching issue • Strongly Branched</title>
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Netscaler 11 content switching caching issue"/>
+<meta name="twitter:description" content="TL;DR: Netscalers have an Integrated Cache feature which can cache files even if not licensed. The cache can store corrupted or outdated files. The only way I found to clear the cache in this situation is with an HA failover or a reboot.
+ I recently had an interesting issue to troubleshoot: A client was having issues with specifically the Outlook Web Access (OWA) on their Exchange servers, but only when accessed from the internet."/>
+
+<meta property="og:title" content="Netscaler 11 content switching caching issue" />
+<meta property="og:description" content="TL;DR: Netscalers have an Integrated Cache feature which can cache files even if not licensed. The cache can store corrupted or outdated files. The only way I found to clear the cache in this situation is with an HA failover or a reboot.
+ I recently had an interesting issue to troubleshoot: A client was having issues with specifically the Outlook Web Access (OWA) on their Exchange servers, but only when accessed from the internet." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://stronglybranched.io/2019/11/netscaler-11-content-switching-caching-issue/" />
+<meta property="article:published_time" content="2019-11-20T00:48:53+01:00" />
+<meta property="article:modified_time" content="2019-11-20T00:48:53+01:00" /><meta property="og:site_name" content="Title" />
+
+
+    
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/scss/hyde-hyde.92c66d107d7b219f0792cfd67223179af884b03f386ac46894f9f735932bbca3.css" integrity="sha256-ksZtEH17IZ8Hks/WciMXmviEsD84asRolPn3NZMrvKM=">
+
+
+<link rel="stylesheet" href="/scss/print.2744dcbf8a0b2e74f8a50e4b34e5f441be7cf93cc7de27029121c6a09f9e77bc.css" integrity="sha256-J0Tcv4oLLnT4pQ5LNOX0Qb58&#43;TzH3icCkSHGoJ&#43;ed7w=" media="print">
+
+
+
+
+<link rel="stylesheet" href="/scss/hugo-toc.8549a64d301421b4256ea9a0d5ca8b99178799f569d5d2daeb95f24cef3ce6b7.css" integrity="sha256-hUmmTTAUIbQlbqmg1cqLmReHmfVp1dLa65XyTO885rc=">
+
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+    
+
+</head>
+
+
+    <body class=" ">
+    
+<div class="sidebar">
+  <div class="container ">
+    <div class="sidebar-about">
+      <span class="site__title">
+        <a href="http://stronglybranched.io/">Strongly Branched</a>
+      </span>
+      
+        
+        
+        
+        <div class="author-image">
+          <img src="http://stronglybranched.io/images/sidebar.svg" alt="Author Image" class="img--circle img--headshot element--center">
+        </div>
+        
+      
+      
+      <p class="site__description">
+         DevOps | Automation | Cloud | Infrastructure 
+      </p>
+    </div>
+    <div class="collapsible-menu">
+      <input type="checkbox" id="menuToggle">
+      <label for="menuToggle">Strongly Branched</label>
+      <div class="menu-content">
+        <div>
+	<ul class="sidebar-nav">
+		 
+		 
+			 
+				<li>
+					<a href="/">
+						<span>Home</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/posts/">
+						<span>Archives</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/categories/">
+						<span>Categories</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/tags/">
+						<span>Tags</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/about/">
+						<span>About</span>
+					</a>
+				</li>
+			 
+		
+	</ul>
+</div>
+
+        <section class="social">
+	
+	<a href="https://twitter.com/draggeta" rel="me"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	<a href="https://github.com/draggeta" rel="me"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	
+	
+	
+	<a href="https://linkedin.com/in/antoniofortesramos" rel="me"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	
+	
+	
+	
+</section>
+
+      </div>
+    </div>
+    
+<div class="copyright">
+  &copy; 2019 Tony Fortes Ramos
+  
+    <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>
+  
+</div>
+
+
+<div class="builtwith">
+Built with <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+</div>
+
+
+  </div>
+</div>
+
+        <div class="content container">
+            
+    
+<article>
+  <header>
+    <h1>Netscaler 11 content switching caching issue</h1>
+    
+    
+<div class="post__meta">
+    
+    
+      <i class="fas fa-calendar-alt"></i> 2019-11-20
+    
+    
+    
+      
+      
+          in
+          
+          
+              <a class="badge badge-category" href="/categories/troubleshooting">TROUBLESHOOTING</a>
+              
+          
+      
+    
+    
+    
+      
+      
+          <br/>
+           <i class="fas fa-tags"></i>
+          
+          <a class="badge badge-tag" href="/tags/netscaler">netscaler</a>
+           
+      
+          <a class="badge badge-tag" href="/tags/cache">cache</a>
+           
+      
+          <a class="badge badge-tag" href="/tags/content-switching">content switching</a>
+           
+      
+          <a class="badge badge-tag" href="/tags/exchange">exchange</a>
+          
+      
+    
+    
+    <br/>
+    <i class="fas fa-clock"></i> 5 min read
+</div>
+
+
+  </header>
+  
+  
+  
+  
+  <div class="post">
+    <blockquote>
+<p><strong>TL;DR:</strong> Netscalers have an <code>Integrated Cache</code> feature which can cache files even if not licensed. The cache can store corrupted or outdated files. The only way I found to clear the cache in this situation is with an HA failover or a reboot.</p>
+</blockquote>
+<p>I recently had an interesting issue to troubleshoot: A client was having issues with specifically the <code>Outlook Web Access</code> (OWA) on their Exchange servers, but only when accessed from the internet. Composing messages was essentially broken. None of the buttons worked and users could not type text in the body. When accessed internally, everything worked as intended.</p>
+<p><!-- raw HTML omitted -->A diagram of the topology:<!-- raw HTML omitted --></p>
+<script async src="https://unpkg.com/mermaid@8.4.2/dist/mermaid.min.js">
+    mermaid.initialize({ startOnLoad: true });
+</script>
+
+<div class="mermaid" align="left">
+    
+graph LR
+  I((Internet)) --> CS[Content Switching VS]
+  
+  subgraph "Netscaler"
+  CS --> LB[Load Balancing VS]
+  end
+
+  L((LAN)) --> LB
+
+  LB --- E1[Exchange]
+  LB --- E2[Exchange]
+  LB --- E3[Exchange]
+
+</div>
+
+<p>As the diagram shows, both the connections from the inside and outside went through the Netscaler. The only difference was that the external connection went through an additional <code>Content Switching Virtual Server</code> (CSVS).</p>
+<h2 id="jumping-in">Jumping in</h2>
+<p>Without any other descriptions of the symptoms, my guess was that the problems were caused by a rendering error. I opened <code>developer mode</code> in a browser and navigated to the page. There I found only one difference between the <code>developer mode` </code>Console` output of the LAN and WAN connections:</p>
+<pre><code>The resource from 
+&quot;https://example.com/owa/…/microsoft.exchange.clients.owa2.client.mail.compose.mouse.css&quot;
+was blocked due to MIME type (&quot;&quot;) mismatch (X-Content-Type-Options: nosniff).
+</code></pre><p>There was an issue with the <code>microsoft.exchange.clients.owa2.client.mail.compose.mouse.css</code> style sheet loading when accessing OWA over the internet. Looking at the file name, it now made sense why only the composing feature was broken.
+Somehow, the client would receive the file, but the browser couldn't interpret it. The output provided another clue: The MIME-type sent by the server is empty and <code>nosniff</code> was set in the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options"><code>X-Content-Type-Options</code></a>. <code>nosniff</code> tells browsers to not read the file headers of style sheets and scripts to infer its type. This is done for security purposes.</p>
+<p>This could be verified by looking at the <code>Network</code> tab, which shows the browser trying to load the style sheet multiple times and blocking it as a result of the empty MIME type.</p>
+<p><img src="image.png" alt="css errors"></p>
+<p>This was puzzling. The internal connection and the content switching servers both used the same <code>Load Balancing Virtual Servers</code> (LBVS). The issues reported by users did not appear when communicating with the LBVS directly. The problem clearly had to do with the CSVS and how it transferred data, so I switched my focus to the broken file.</p>
+<h2 id="locating-the-cause">Locating the cause</h2>
+<p>Upon closer inspection, there was a strange difference between the two scenarios. On the LAN side, the servers transferred 4kb of (uncompressed) data. Externally only a measly 800 bytes were transferred. The reverse-proxy functionality of appliance seemed to be mangling the data.</p>
+<p>Looking at the headers in <code>developer mode</code>, I noticed two peculiar things:</p>
+<ol>
+<li>The response header for the CSS file the <code>Via</code> header field set to <code>NS-CACHE-10.0: 251</code>.</li>
+<li>The value of the <code>X-FEServer</code> header field (added by Exchange) showed that the CSS file was always presented by the same server. This was not the case internally. Now I finally had something to go on.</li>
+</ol>
+<p>After some searching online, it turned out that Netscalers do have a caching feature (Integrated Cache), but it needs to be licensed. Well, these devices didn't have the feature licensed, but seemingly they were still caching. While scratching my head, I found <a href="https://discussions.citrix.com/topic/388657-netscaler-caches-files-even-if-integrated-cache-is-not-licensed-disabled/">this forum post</a>. This gave me the impression that the caching feature is enabled by default, but unmanageable if not licensed.</p>
+<p>This required me to change the topology in my head to something more akin to this:</p>
+<script async src="https://unpkg.com/mermaid@8.4.2/dist/mermaid.min.js">
+    mermaid.initialize({ startOnLoad: true });
+</script>
+
+<div class="mermaid" align="left">
+    
+graph LR
+  I((Internet)) --> CS[Content Switching VS]
+  
+  subgraph "Netscaler"
+  CS <--> Cache
+  CS --> LB[Load Balancing VS]
+  end
+
+  L((LAN)) --> LB
+
+  LB --- E1[Exchange]
+  LB --- E2[Exchange]
+  LB --- E3[Exchange]
+
+</div>
+
+<p>All the pieces started falling into place. I'm still not 100% sure what happened. At a certain point in time, while the file was being transferred from the Exchange server to the Netscaler, the transfer must have failed (see the highlighted area below). This failure was cached by the Netscaler and sent to all clients requesting the file. Due to the fact that it was a partial file with no MIME data, the file wasn't even opened by the browser as <code>nosniff</code> was set.</p>
+<blockquote>
+<p><strong>Note:</strong> I don't know the inner workings of Netscalers; the flow described below is a guess, inferred from observations. It may well be that the cache is between the CSVS and LBVS or even in front of the CSVS.</p>
+</blockquote>
+<script async src="https://unpkg.com/mermaid@8.4.2/dist/mermaid.min.js">
+    mermaid.initialize({ startOnLoad: true });
+</script>
+
+<div class="mermaid" align="left">
+    
+sequenceDiagram
+  Client ->> CSVS: Please send CSS file
+  CSVS ->> Cache: Check if CSS in cache
+  alt in cache
+    Cache -->> CSVS: Return CSS from cache
+  else not in cache
+    CSVS ->> LBVS: pass request to LBVS
+    LBVS ->> Exchange: Please send CSS file
+    rect rgb(255, 128, 128)
+      Exchange -->> LBVS: Here's the CSS file
+      LBVS -->> CSVS: Here's the CSS file
+      CSVS ->> Cache: Cache CSS file
+    end
+  end
+  CSVS -->> Client: Here's the CSS file
+
+</div>
+
+<h2 id="an-annoying-fix">An annoying fix</h2>
+<p>The problem was now identified, but I still had an issue: How to fix this? Clearing the cache is the obvious solution, but if the <code>Integrated Cache</code> feature is not licensed, there is no way to empty it with a command or via the GUI.</p>
+<p>The only two options I could find are to perform a failover or to reboot the Netscaler, which both clear the cache.</p>
+<p>After clearing the cache, the file finally loaded correcly and OWA functionality was restored.</p>
+
+  </div>
+  
+
+<div class="navigation navigation-single">
+    
+    
+</div>
+
+
+  
+
+  
+    
+
+
+</article>
+
+
+        </div>
+        
+    
+
+<script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
+
+
+    
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+        
+    
+    <script type="text/javascript">
+        
+        hljs.initHighlightingOnLoad();
+    </script>
+    
+
+
+
+
+
+
+    
+
+
+
+    </body>
+</html>

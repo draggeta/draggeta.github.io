@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Strongly Branched</title>
+    <link>http://stronglybranched.io/tags/</link>
+    <description>Recent content in Tags on Strongly Branched</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>©2019</copyright>
+    <lastBuildDate>Wed, 20 Nov 2019 00:48:53 +0100</lastBuildDate>
+    
+	<atom:link href="http://stronglybranched.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>cache</title>
+      <link>http://stronglybranched.io/tags/cache/</link>
+      <pubDate>Wed, 20 Nov 2019 00:48:53 +0100</pubDate>
+      
+      <guid>http://stronglybranched.io/tags/cache/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>content switching</title>
+      <link>http://stronglybranched.io/tags/content-switching/</link>
+      <pubDate>Wed, 20 Nov 2019 00:48:53 +0100</pubDate>
+      
+      <guid>http://stronglybranched.io/tags/content-switching/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>exchange</title>
+      <link>http://stronglybranched.io/tags/exchange/</link>
+      <pubDate>Wed, 20 Nov 2019 00:48:53 +0100</pubDate>
+      
+      <guid>http://stronglybranched.io/tags/exchange/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>netscaler</title>
+      <link>http://stronglybranched.io/tags/netscaler/</link>
+      <pubDate>Wed, 20 Nov 2019 00:48:53 +0100</pubDate>
+      
+      <guid>http://stronglybranched.io/tags/netscaler/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
