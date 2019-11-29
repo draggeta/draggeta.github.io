@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>blog on Strongly Branched</title>
+    <link>https://stronglybranched.io/categories/blog/</link>
+    <description>Recent content in blog on Strongly Branched</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>©2019</copyright>
+    
+	<atom:link href="https://stronglybranched.io/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Introduction</title>
+      <link>https://stronglybranched.io/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://stronglybranched.io/about/</guid>
+      <description>I&#39;ve decided to start writing a technical blog for two reasons. Reason one is the fact that I&#39;ve been immensly helped by all the blogs online. They helped me study for certs, learn new things or just gave solutions to problems at work. I hope this blog is able to contribute back and help others on their journey.
+Reason two is more personal. I just want to develop my skills and writing information down is a good way to force myself to really dive deep.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -53,7 +53,19 @@
   </url>
   
   <url>
+    <loc>https://stronglybranched.io/categories/blog/</loc>
+  </url>
+  
+  <url>
+    <loc>https://stronglybranched.io/tags/blogging/</loc>
+  </url>
+  
+  <url>
     <loc>https://stronglybranched.io/about/</loc>
+  </url>
+  
+  <url>
+    <loc>https://stronglybranched.io/tags/introduction/</loc>
   </url>
   
 </urlset>
