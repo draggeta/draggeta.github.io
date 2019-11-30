@@ -1,269 +1,279 @@
 <!DOCTYPE html>
-<html lang="en-us">
-    
-    
-
-
-    <head>
-    <link href="https://gmpg.org/xfn/11" rel="profile">
-    <meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta http-equiv="Cache-Control" content="public" />
-<!-- Enable responsiveness on mobile devices -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.60.1" />
-
-    
-    
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+  <head>
     
 
-<title>Netscaler 11 content switching caching issue • Strongly Branched</title>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Netscaler 11 content switching caching issue"/>
-<meta name="twitter:description" content="Flooding at Cache River U.S. Fish and Wildlife Service Southeast Region
-   TL;DR: Netscalers have an Integrated Cache feature which can cache files even if not licensed. The cache can store corrupted or outdated files. The only way I found to clear the cache in this situation is with an HA failover or a reboot.
- I recently had an interesting issue to troubleshoot: A client was having issues with specifically the Outlook Web Access (OWA) on their Exchange servers, but only when accessed from the internet."/>
+  <title>Netscaler 11 content switching caching issue - Strongly Branched</title>
+  <meta name="description" content="Troubleshooting why an Exchange OWA page isn&#39;t loading correctly when content switched by a Netscaler.">
+  <meta name="author" content="Tony Fortes Ramos"/><script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "WebSite",
+    "name": "Strongly Branched",
+    
+    "url": "https:\/\/stronglybranched.io\/"
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "name": "",
+  "url": "https:\/\/stronglybranched.io\/"
+  
+  
+  
+  
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@id": "https:\/\/stronglybranched.io\/",
+          "name": "home"
+        }
+    },{
+        "@type": "ListItem",
+        "position": 3,
+        "item": {
+          "@id": "https:\/\/stronglybranched.io\/2019\/11\/netscaler-11-content-switching-caching-issue\/",
+          "name": "Netscaler 11 content switching caching issue"
+        }
+    }]
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Article",
+  "author": {
+    "name" : "Tony Fortes Ramos"
+  },
+  "headline": "Netscaler 11 content switching caching issue",
+  "description" : "Troubleshooting why an Exchange OWA page isn\x27t loading correctly when content switched by a Netscaler.",
+  "inLanguage" : "en",
+  "wordCount":  935 ,
+  "datePublished" : "2019-11-20T00:48:53",
+  "dateModified" : "2019-11-20T00:48:53",
+  "image" : "https:\/\/stronglybranched.io\/img\/sidebar.svg",
+  "keywords" : [ "netscaler, cache, content switching, exchange" ],
+  "mainEntityOfPage" : "https:\/\/stronglybranched.io\/2019\/11\/netscaler-11-content-switching-caching-issue\/",
+  "publisher" : {
+    "@type": "Organization",
+    "name" : "https:\/\/stronglybranched.io\/",
+    "logo" : {
+        "@type" : "ImageObject",
+        "url" : "https:\/\/stronglybranched.io\/img\/sidebar.svg",
+        "height" :  60 ,
+        "width" :  60
+    }
+  }
+}
+</script>
 
 <meta property="og:title" content="Netscaler 11 content switching caching issue" />
-<meta property="og:description" content="Flooding at Cache River U.S. Fish and Wildlife Service Southeast Region
-   TL;DR: Netscalers have an Integrated Cache feature which can cache files even if not licensed. The cache can store corrupted or outdated files. The only way I found to clear the cache in this situation is with an HA failover or a reboot.
- I recently had an interesting issue to troubleshoot: A client was having issues with specifically the Outlook Web Access (OWA) on their Exchange servers, but only when accessed from the internet." />
-<meta property="og:type" content="article" />
+<meta property="og:description" content="Troubleshooting why an Exchange OWA page isn&#39;t loading correctly when content switched by a Netscaler.">
+<meta property="og:image" content="https://stronglybranched.io/img/sidebar.svg" />
 <meta property="og:url" content="https://stronglybranched.io/2019/11/netscaler-11-content-switching-caching-issue/" />
-<meta property="article:published_time" content="2019-11-20T00:48:53+01:00" />
-<meta property="article:modified_time" content="2019-11-20T00:48:53+01:00" /><meta property="og:site_name" content="Title" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Strongly Branched" />
 
-
-    
-
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
-
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/scss/hyde-hyde.92c66d107d7b219f0792cfd67223179af884b03f386ac46894f9f735932bbca3.css" integrity="sha256-ksZtEH17IZ8Hks/WciMXmviEsD84asRolPn3NZMrvKM=">
-
-
-<link rel="stylesheet" href="/scss/print.2744dcbf8a0b2e74f8a50e4b34e5f441be7cf93cc7de27029121c6a09f9e77bc.css" integrity="sha256-J0Tcv4oLLnT4pQ5LNOX0Qb58&#43;TzH3icCkSHGoJ&#43;ed7w=" media="print">
+  <meta name="twitter:title" content="Netscaler 11 content switching caching issue" />
+  <meta name="twitter:description" content="Troubleshooting why an Exchange OWA page isn&#39;t loading correctly when content switched by a Netscaler.">
+  <meta name="twitter:image" content="https://stronglybranched.io/img/sidebar.svg" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@draggeta" />
+  <meta name="twitter:creator" content="@draggeta" />
+  <link href='https://stronglybranched.io/img/favicon.ico' rel='icon' type='image/x-icon'/>
+  <meta name="generator" content="Hugo 0.60.1" />
+  <link rel="alternate" href="https://stronglybranched.io/index.xml" type="application/rss+xml" title="Strongly Branched"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><link rel="stylesheet" href="https://stronglybranched.io/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" /><link rel="stylesheet" href="https://stronglybranched.io/css/syntax.css" /><link rel="stylesheet" href="https://stronglybranched.io/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous">
 
 
 
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://stronglybranched.io/">Strongly Branched</a>
+    </div>
 
-<link rel="stylesheet" href="/scss/hugo-toc.8549a64d301421b4256ea9a0d5ca8b99178799f569d5d2daeb95f24cef3ce6b7.css" integrity="sha256-hUmmTTAUIbQlbqmg1cqLmReHmfVp1dLa65XyTO885rc=">
-
-
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    <!-- Icons -->
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
-    <link rel="shortcut icon" href="/favicon.png">
-    
-    
-
-</head>
-
-
-    <body class=" ">
-    
-<div class="sidebar">
-  <div class="container ">
-    <div class="sidebar-about">
-      <span class="site__title">
-        <a href="https://stronglybranched.io/">Strongly Branched</a>
-      </span>
-      
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
         
+          
+            <li>
+              <a title="Home" href="/">Home</a>
+            </li>
+          
         
+          
+            <li>
+              <a title="Archives" href="/posts/">Archives</a>
+            </li>
+          
         
-        <div class="author-image">
-          <img src="https://stronglybranched.io/img/sidebar.svg" alt="Author Image" class="img--circle img--headshot element--center">
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent">Meta</a>
+              <div class="navlinks-children">
+                
+                  <a href="/categories">Categories</a>
+                
+                  <a href="/tags">Tags</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li>
+              <a title="About" href="/about/">About</a>
+            </li>
+          
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    
+      <div class="avatar-container">
+        <div class="avatar-img-border">
+          <a title="Strongly Branched" href="https://stronglybranched.io/">
+            <img class="avatar-img" src="https://stronglybranched.io/img/sidebar.svg" alt="Strongly Branched" />
+          </a>
         </div>
-        
-      
-      
-      <p class="site__description">
-         DevOps | Automation | Cloud | Infrastructure 
-      </p>
-    </div>
-    <div class="collapsible-menu">
-      <input type="checkbox" id="menuToggle">
-      <label for="menuToggle">Strongly Branched</label>
-      <div class="menu-content">
-        <div>
-	<ul class="sidebar-nav">
-		 
-		 
-			 
-				<li>
-					<a href="/">
-						<span>Home</span>
-					</a>
-				</li>
-			 
-		 
-			 
-				<li>
-					<a href="/posts/">
-						<span>Archives</span>
-					</a>
-				</li>
-			 
-		 
-			 
-				<li>
-					<a href="/categories/">
-						<span>Categories</span>
-					</a>
-				</li>
-			 
-		 
-			 
-				<li>
-					<a href="/tags/">
-						<span>Tags</span>
-					</a>
-				</li>
-			 
-		 
-			 
-				<li>
-					<a href="/about/">
-						<span>About</span>
-					</a>
-				</li>
-			 
-		 
-			 
-				<li>
-					<a href="/index.xml">
-						<span>RSS</span>
-					</a>
-				</li>
-			 
-		
-	</ul>
-</div>
-
-        <section class="social">
-	
-	<a href="https://twitter.com/draggeta" rel="me"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
-	
-	
-	
-	<a href="https://github.com/draggeta" rel="me"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
-	
-	
-	
-	
-	
-	
-	
-	<a href="https://linkedin.com/in/antoniofortesramos" rel="me"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a>
-	
-	
-	
-	
-	
-	
-	
-	
-</section>
-
       </div>
-    </div>
     
-<div class="copyright">
-  &copy; 2019 Tony Fortes Ramos
-  
-    <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>
-  
-</div>
-
-
-<div class="builtwith">
-Built with <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
-</div>
-
 
   </div>
+</nav>
+
+
+
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
 </div>
 
-        <div class="content container">
-            
+
+  
+  
+  
+
+
+
+
+
+
+  
+
+  <header class="header-section ">
     
-<article>
-  <header>
-    <h1>Netscaler 11 content switching caching issue</h1>
-    
-    
-<div class="post__meta">
-    
-    
-      <i class="fas fa-calendar-alt"></i> 2019-11-20
-    
-    
-    
-      
-      
-          in
-          
-          
-              <a class="badge badge-category" href="/categories/troubleshooting">TROUBLESHOOTING</a>
+    <div class="intro-header no-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="posts-heading">
               
-          
-      
+                <h1>Netscaler 11 content switching caching issue</h1>
+              
+              
+                <hr class="small">
+              
+              
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
     
-    
-    
-      
-      
-          <br/>
-           <i class="fas fa-tags"></i>
-          
-          <a class="badge badge-tag" href="/tags/netscaler">netscaler</a>
-           
-      
-          <a class="badge badge-tag" href="/tags/cache">cache</a>
-           
-      
-          <a class="badge badge-tag" href="/tags/content-switching">content switching</a>
-           
-      
-          <a class="badge badge-tag" href="/tags/exchange">exchange</a>
-          
-      
-    
-    
-    <br/>
-    <i class="fas fa-clock"></i> 5 min read
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        
+<link rel="stylesheet" href="https://stronglybranched.io/css/hugo-easy-gallery.css" />
+<div class="box fancy-figure caption-position-bottom caption-effect-fade" style="max-width:1000">
+  <figure  itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+    <div class="img">
+      <img itemprop="thumbnail" src="./media/title.png" alt="Housing and Other Facilities Were Flooded at Cache River National Wildlife Refuge."/>
+    </div>
+    <a href="./media/title.png" itemprop="contentUrl"></a>
+      <figcaption>
+          <p>Flooding at Cache River ©U.S. Fish and Wildlife Service Southeast Region</p>
+      </figcaption>
+  </figure>
 </div>
 
-
-  </header>
-  
-  
-  
-  
-  <div class="post">
-    <figure>
-    <img src="./media/title.png"
-         alt="Housing and Other Facilities Were Flooded at Cache River National Wildlife Refuge."/> <figcaption>
-            <p>Flooding at Cache River
-                    <a href="https://creativecommons.org/licenses/by/2.0/deed.en">U.S. Fish and Wildlife Service Southeast Region</a></p>
-        </figcaption>
-</figure>
-
+<!-- raw HTML omitted -->
 <blockquote>
 <p><strong>TL;DR:</strong> Netscalers have an <code>Integrated Cache</code> feature which can cache files even if not licensed. The cache can store corrupted or outdated files. The only way I found to clear the cache in this situation is with an HA failover or a reboot.</p>
 </blockquote>
@@ -299,12 +309,19 @@ was blocked due to MIME type (&quot;&quot;) mismatch (X-Content-Type-Options: no
 </code></pre><p>There was an issue with the <code>microsoft.exchange.clients.owa2.client.mail.compose.mouse.css</code> style sheet loading when accessing OWA over the internet. Looking at the file name, it now made sense why only the composing feature was broken.
 Somehow, the client would receive the file, but the browser couldn't interpret it. The output provided another clue: The MIME-type sent by the server is empty and <code>nosniff</code> was set in the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options"><code>X-Content-Type-Options</code></a>. <code>nosniff</code> tells browsers to not read the file headers of style sheets and scripts to infer its type. This is done for security purposes.</p>
 <p>This could be verified by looking at the <code>Network</code> tab, which shows the browser trying to load the style sheet multiple times and blocking it as a result of the empty MIME type.</p>
-<figure>
-    <img src="./media/css_errors.png"
-         alt="CSS files are downloaded, but have no content type associated with them."/> <figcaption>
-            <p>Errors downloading the CSS</p>
-        </figcaption>
-</figure>
+
+
+<div class="box fancy-figure caption-position-bottom caption-effect-fade" >
+  <figure  itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+    <div class="img">
+      <img itemprop="thumbnail" src="./media/css_errors.png" alt="CSS files are downloaded, but have no content type associated with them."/>
+    </div>
+    <a href="./media/css_errors.png" itemprop="contentUrl"></a>
+      <figcaption>
+          <p>Errors downloading the CSS</p>
+      </figcaption>
+  </figure>
+</div>
 
 <p>This was puzzling. The internal connection and the content switching servers both used the same <code>Load Balancing Virtual Servers</code> (LBVS). The issues reported by users did not appear when communicating with the LBVS directly. The problem clearly had to do with the CSVS and how it transferred data, so I switched my focus to the broken file.</p>
 <h2 id="locating-the-cause">Locating the cause</h2>
@@ -371,50 +388,167 @@ sequenceDiagram
 <p>The only two options I could find are to perform a failover or to reboot the Netscaler, which both clear the cache.</p>
 <p>After clearing the cache, the file finally loaded correcly and OWA functionality was restored.</p>
 
-  </div>
-  
 
-<div class="navigation navigation-single">
-    
-    
+        
+          <div class="blog-tags">
+            
+              <a href="https://stronglybranched.io//tags/netscaler/">netscaler</a>&nbsp;
+            
+              <a href="https://stronglybranched.io//tags/cache/">cache</a>&nbsp;
+            
+              <a href="https://stronglybranched.io//tags/content-switching/">content switching</a>&nbsp;
+            
+              <a href="https://stronglybranched.io//tags/exchange/">exchange</a>&nbsp;
+            
+          </div>
+        
+
+        
+
+        
+          
+
+          
+        
+      </article>
+
+      
+        <ul class="pager blog-pager">
+          
+          
+        </ul>
+      
+
+
+      
+        
+          
+          <div class="disqus-comments">                  
+            <button id="show-comments" class="btn btn-default" type="button">Show <span class="disqus-comment-count" data-disqus-url="https://stronglybranched.io/2019/11/netscaler-11-content-switching-caching-issue">comments</span></button>
+            <div id="disqus_thread"></div>
+
+            <script type="text/javascript">
+              var disqus_config = function () {
+              this.page.url = 'https:\/\/stronglybranched.io\/2019\/11\/netscaler-11-content-switching-caching-issue';
+            };
+
+          </script>
+          </div>
+          
+        
+        
+      
+
+    </div>
+  </div>
 </div>
 
+      
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="https://github.com/draggeta" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://twitter.com/draggeta" title="Twitter">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://linkedin.com/in/antoniofortesramos" title="LinkedIn">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+          <li>
+            <a href="" title="RSS">
+              <span class="fa-stack fa-lg">
+                <i class="fas fa-circle fa-stack-2x"></i>
+                <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+            
+              Tony Fortes Ramos
+            
+          
 
-  
+          &nbsp;&bull;&nbsp;&copy;
+          
+            2019
+          
 
-  
-    
-
-
-</article>
-
-
-        </div>
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://stronglybranched.io/">Strongly Branched</a>
+          
+        </p>
         
+        <p class="credits theme-by text-muted">
+          <a href="https://gohugo.io">Hugo v0.60.1</a> powered &nbsp;&bull;&nbsp; Theme <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a> adapted from <a href="https://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a>
+          &nbsp;&bull;&nbsp;[<a href="https://github.com/draggeta/blog/tree/d48959405ddb411b215eef5045b2668c362fcb59">d4895940</a>]
+        </p>
+      </div>
+    </div>
+  </div>
+</footer><script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="https://stronglybranched.io/js/main.js"></script><script> renderMathInElement(document.body); </script><script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script><script src="https://stronglybranched.io/js/load-photoswipe.js"></script>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+$(function(){
+  $('#show-comments').on('click', function(){
+    var disqus_shortname = 'stronglybranched';
+      
+    (function() {
+      var disqus = document.createElement('script'); 
+      disqus.type = 'text/javascript'; 
+      disqus.async = true;
+      disqus.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(disqus);
+    })();
+      
+    $(this).hide(); 
+    });
+  });
+      
+</script>
+<script id="dsq-count-scr" src="//stronglybranched.disqus.com/count.js" async></script>
+
+
+
+
     
-
-<script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
-
-
-    
-    
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
-        
-    
-    <script type="text/javascript">
-        
-        hljs.initHighlightingOnLoad();
-    </script>
-    
-
-
-
-
-
-
-    
-
-
-
-    </body>
+  </body>
 </html>
+
