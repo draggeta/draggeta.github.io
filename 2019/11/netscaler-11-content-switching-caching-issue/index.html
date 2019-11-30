@@ -22,11 +22,13 @@
 
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Netscaler 11 content switching caching issue"/>
-<meta name="twitter:description" content="TL;DR: Netscalers have an Integrated Cache feature which can cache files even if not licensed. The cache can store corrupted or outdated files. The only way I found to clear the cache in this situation is with an HA failover or a reboot.
+<meta name="twitter:description" content="Flooding at Cache River U.S. Fish and Wildlife Service Southeast Region
+   TL;DR: Netscalers have an Integrated Cache feature which can cache files even if not licensed. The cache can store corrupted or outdated files. The only way I found to clear the cache in this situation is with an HA failover or a reboot.
  I recently had an interesting issue to troubleshoot: A client was having issues with specifically the Outlook Web Access (OWA) on their Exchange servers, but only when accessed from the internet."/>
 
 <meta property="og:title" content="Netscaler 11 content switching caching issue" />
-<meta property="og:description" content="TL;DR: Netscalers have an Integrated Cache feature which can cache files even if not licensed. The cache can store corrupted or outdated files. The only way I found to clear the cache in this situation is with an HA failover or a reboot.
+<meta property="og:description" content="Flooding at Cache River U.S. Fish and Wildlife Service Southeast Region
+   TL;DR: Netscalers have an Integrated Cache feature which can cache files even if not licensed. The cache can store corrupted or outdated files. The only way I found to clear the cache in this situation is with an HA failover or a reboot.
  I recently had an interesting issue to troubleshoot: A client was having issues with specifically the Outlook Web Access (OWA) on their Exchange servers, but only when accessed from the internet." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://stronglybranched.io/2019/11/netscaler-11-content-switching-caching-issue/" />
@@ -141,6 +143,14 @@
 					</a>
 				</li>
 			 
+		 
+			 
+				<li>
+					<a href="/index.xml">
+						<span>RSS</span>
+					</a>
+				</li>
+			 
 		
 	</ul>
 </div>
@@ -246,7 +256,15 @@ Built with <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.c
   
   
   <div class="post">
-    <blockquote>
+    <figure>
+    <img src="./media/title.png"
+         alt="Housing and Other Facilities Were Flooded at Cache River National Wildlife Refuge."/> <figcaption>
+            <p>Flooding at Cache River
+                    <a href="https://creativecommons.org/licenses/by/2.0/deed.en">U.S. Fish and Wildlife Service Southeast Region</a></p>
+        </figcaption>
+</figure>
+
+<blockquote>
 <p><strong>TL;DR:</strong> Netscalers have an <code>Integrated Cache</code> feature which can cache files even if not licensed. The cache can store corrupted or outdated files. The only way I found to clear the cache in this situation is with an HA failover or a reboot.</p>
 </blockquote>
 <p>I recently had an interesting issue to troubleshoot: A client was having issues with specifically the <code>Outlook Web Access</code> (OWA) on their Exchange servers, but only when accessed from the internet. Composing messages was essentially broken. None of the buttons worked and users could not type text in the body. When accessed internally, everything worked as intended.</p>
@@ -281,7 +299,13 @@ was blocked due to MIME type (&quot;&quot;) mismatch (X-Content-Type-Options: no
 </code></pre><p>There was an issue with the <code>microsoft.exchange.clients.owa2.client.mail.compose.mouse.css</code> style sheet loading when accessing OWA over the internet. Looking at the file name, it now made sense why only the composing feature was broken.
 Somehow, the client would receive the file, but the browser couldn't interpret it. The output provided another clue: The MIME-type sent by the server is empty and <code>nosniff</code> was set in the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options"><code>X-Content-Type-Options</code></a>. <code>nosniff</code> tells browsers to not read the file headers of style sheets and scripts to infer its type. This is done for security purposes.</p>
 <p>This could be verified by looking at the <code>Network</code> tab, which shows the browser trying to load the style sheet multiple times and blocking it as a result of the empty MIME type.</p>
-<p><img src="image.png" alt="css errors"></p>
+<figure>
+    <img src="./media/css_errors.png"
+         alt="CSS files are downloaded, but have no content type associated with them."/> <figcaption>
+            <p>Errors downloading the CSS</p>
+        </figcaption>
+</figure>
+
 <p>This was puzzling. The internal connection and the content switching servers both used the same <code>Load Balancing Virtual Servers</code> (LBVS). The issues reported by users did not appear when communicating with the LBVS directly. The problem clearly had to do with the CSVS and how it transferred data, so I switched my focus to the broken file.</p>
 <h2 id="locating-the-cause">Locating the cause</h2>
 <p>Upon closer inspection, there was a strange difference between the two scenarios. On the LAN side, the servers transferred 4kb of (uncompressed) data. Externally only a measly 800 bytes were transferred. The reverse-proxy functionality of appliance seemed to be mangling the data.</p>
