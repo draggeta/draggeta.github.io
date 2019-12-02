@@ -5,6 +5,8 @@
     <link>https://stronglybranched.io/tags/netscaler/</link>
     <description>Recent content in netscaler on Strongly Branched</description>
     <generator>Hugo -- gohugo.io</generator>
+    <managingEditor>amfortesramos&#43;stronglybranched@hotmail.com (Tony Fortes Ramos)</managingEditor>
+    <webMaster>amfortesramos&#43;stronglybranched@hotmail.com (Tony Fortes Ramos)</webMaster>
     <copyright>©2019</copyright>
     <lastBuildDate>Wed, 20 Nov 2019 00:48:53 +0100</lastBuildDate>
     
@@ -15,7 +17,7 @@
       <title>Netscaler 11 content switching caching issue</title>
       <link>https://stronglybranched.io/2019/11/netscaler-11-content-switching-caching-issue/</link>
       <pubDate>Wed, 20 Nov 2019 00:48:53 +0100</pubDate>
-      
+      <author>amfortesramos&#43;stronglybranched@hotmail.com (Tony Fortes Ramos)</author>
       <guid>https://stronglybranched.io/2019/11/netscaler-11-content-switching-caching-issue/</guid>
       <description>Flooding at Cache River ©U.S. Fish and Wildlife Service Southeast Region
     TL;DR: Netscalers have an Integrated Cache feature which can cache files even if not licensed. The cache can store corrupted or outdated files. The only way I found to clear the cache in this situation is with an HA failover or a reboot.
