@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>thunderbolt on Strongly Branched</title>
+    <link>https://stronglybranched.io/tags/thunderbolt/</link>
+    <description>Recent content in thunderbolt on Strongly Branched</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <managingEditor>stronglybranched@outlook.com (Tony Fortes Ramos)</managingEditor>
+    <webMaster>stronglybranched@outlook.com (Tony Fortes Ramos)</webMaster>
+    <copyright>©2019</copyright>
+    <lastBuildDate>Thu, 09 Jan 2020 21:51:58 +0100</lastBuildDate>
+    
+	<atom:link href="https://stronglybranched.io/tags/thunderbolt/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>USB-C device won&#39;t output to a USB-C monitor</title>
+      <link>https://stronglybranched.io/2020/01/usb-c-device-wont-output-to-a-usb-c-monitor/</link>
+      <pubDate>Thu, 09 Jan 2020 21:51:58 +0100</pubDate>
+      <author>stronglybranched@outlook.com (Tony Fortes Ramos)</author>
+      <guid>https://stronglybranched.io/2020/01/usb-c-device-wont-output-to-a-usb-c-monitor/</guid>
+      <description>Cable mess ©Alessio CC BY 2.0
+   Last holiday I helped my sister find a new setup for her home office. I wanted her setup to be as simple as possible, while still being reasonably priced. The choice fell on the Lenovo 13S-IWL laptop and Dell U2719DC monitor.
+Both the monitor and laptop support USB Type-C (USB-C) DisplayPort (DP) Alternate Mode (Alt Mode) which allows for output/input of a DP signal over USB-C.</description>
+    </item>
+    
+  </channel>
+</rss>

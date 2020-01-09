@@ -13,7 +13,7 @@
    height="260"
    version="1.1"
    style="clip-rule:evenodd;fill-rule:evenodd;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
-   sodipodi:docname="avatar-icon.svg"
+   sodipodi:docname="avatar-favicon.svg"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
   <defs
      id="defs184" />
@@ -31,12 +31,12 @@
      id="namedview182"
      showgrid="false"
      inkscape:zoom="1"
-     inkscape:cx="-78.012249"
+     inkscape:cx="-248.51225"
      inkscape:cy="-100.05442"
-     inkscape:window-x="1912"
+     inkscape:window-x="3832"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer4"
+     inkscape:current-layer="layer2"
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"
@@ -141,84 +141,6 @@
      transform="matrix(0.7801936,0,0,0.7801936,250.02648,-725.86067)"
      style="clip-rule:evenodd;fill-rule:evenodd;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
      id="g5118-40" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer1"
-     inkscape:label="Hexagon"
-     style="display:none"
-     transform="translate(-248.71909,-754.74598)">
-    <g
-       style="clip-rule:evenodd;fill:#90416d;fill-opacity:1;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
-       transform="matrix(2.811516,0,0,2.811516,-279.17974,-580.05377)"
-       id="g105-5">
-      <g
-         style="clip-rule:evenodd;fill:#90416d;fill-opacity:1;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
-         transform="matrix(0.89977513,0,0,0.89977513,23.452618,52.217165)"
-         id="g105-1">
-        <g
-           style="fill:#90416d;fill-opacity:1;stroke-linecap:round;stroke-linejoin:round"
-           id="g-1-5">
-          <g
-             style="fill:#90416d;fill-opacity:1;stroke-linecap:round;stroke-linejoin:round"
-             id="g-2-0">
-            <path
-               inkscape:connector-curvature="0"
-               class="st0"
-               d="m 277,546 -43,25 -43,-25 v -50 l 43,-25 43,25 z"
-               style="fill:#90416d;fill-opacity:1;stroke-linecap:round;stroke-linejoin:round"
-               id="path101-0" />
-          </g>
-        </g>
-      </g>
-    </g>
-    <g
-       style="clip-rule:evenodd;fill:#cd809e;fill-opacity:1;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
-       transform="matrix(1.9112336,0,0,1.9112336,-89.734794,-107.49363)"
-       id="g105">
-      <g
-         style="fill:#cd809e;fill-opacity:1;stroke-linecap:round;stroke-linejoin:round"
-         id="g-1">
-        <g
-           style="fill:#cd809e;fill-opacity:1;stroke-linecap:round;stroke-linejoin:round"
-           id="g-2">
-          <path
-             inkscape:connector-curvature="0"
-             class="st0"
-             d="m 288.10339,544.16195 -43,25 -43,-25 v -50 l 43,-25 43,25 z"
-             style="fill:#cd809e;fill-opacity:1;stroke-linecap:round;stroke-linejoin:round"
-             id="path101" />
-        </g>
-      </g>
-    </g>
-  </g>
-  <g
-     inkscape:groupmode="layer"
-     id="layer3"
-     inkscape:label="White"
-     style="display:none"
-     transform="translate(-248.71909,-754.74598)">
-    <ellipse
-       style="clip-rule:evenodd;display:inline;fill:#fff9fc;fill-opacity:1;fill-rule:evenodd;stroke:#000012;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
-       id="path6451"
-       cx="562.71893"
-       cy="106.07256"
-       rx="6.6791439"
-       ry="6.8699765" />
-    <ellipse
-       style="clip-rule:evenodd;display:inline;fill:#fff9fc;fill-opacity:1;fill-rule:evenodd;stroke:#000012;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
-       id="path6451-7"
-       cx="700.20007"
-       cy="27.179886"
-       rx="6.0032749"
-       ry="6.1747971" />
-    <ellipse
-       style="clip-rule:evenodd;display:inline;fill:#fff9fc;fill-opacity:1;fill-rule:evenodd;stroke:#000012;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
-       id="path6451-1"
-       cx="837.32599"
-       cy="105.93161"
-       rx="6.6791439"
-       ry="6.8699765" />
-  </g>
   <g
      inkscape:groupmode="layer"
      id="layer2"
