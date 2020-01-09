@@ -92,7 +92,7 @@
   <meta name="twitter:site" content="@draggeta" />
   <meta name="twitter:creator" content="@draggeta" />
   <link href='https://stronglybranched.io/img/favicon.ico' rel='icon' type='image/x-icon'/>
-  <meta name="generator" content="Hugo 0.60.1" />
+  <meta name="generator" content="Hugo 0.62.2" />
   <link rel="alternate" href="https://stronglybranched.io/index.xml" type="application/rss+xml" title="Strongly Branched"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><link rel="stylesheet" href="https://stronglybranched.io/css/main.css" /><link rel="stylesheet" href="https://stronglybranched.io/css/staticman.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
@@ -330,11 +330,11 @@ graph LR
 
 <p>As the diagram shows, both the connections from the inside and outside went through the Netscaler. The only difference was that the external connection went through an additional <code>Content Switching Virtual Server</code> (CSVS).</p>
 <h2 id="jumping-in">Jumping in</h2>
-<p>Without any other descriptions of the symptoms, my guess was that the problems were caused by a rendering error. I opened <code>developer mode</code> in a browser and navigated to the page. There I found only one difference between the <code>developer mode` </code>console` output of the LAN and WAN connections:</p>
-<pre><code>The resource from 
-&quot;https://example.com/owa/…/microsoft.exchange.clients.owa2.client.mail.compose.mouse.css&quot;
-was blocked due to MIME type (&quot;&quot;) mismatch (X-Content-Type-Options: nosniff).
-</code></pre><p>There was an issue with the <code>microsoft.exchange.clients.owa2.client.mail.compose.mouse.css</code> style sheet loading when accessing OWA over the internet. Looking at the file name, it now made sense why only the composing feature was broken.
+<p>Without any other descriptions of the symptoms, my guess was that the problems were caused by a rendering error. I opened <code>developer mode</code> in a browser and navigated to the page. There I found only one difference between the <code>developer mode</code> <code>console</code> output of the LAN and WAN connections:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">The resource from 
+&#34;https://example.com/owa/…/microsoft.exchange.clients.owa2.client.mail.compose.mouse.css&#34;
+was blocked due to MIME type (&#34;&#34;) mismatch (X-Content-Type-Options: nosniff).
+</code></pre></div><p>There was an issue with the <code>microsoft.exchange.clients.owa2.client.mail.compose.mouse.css</code> style sheet loading when accessing OWA over the internet. Looking at the file name, it now made sense why only the composing feature was broken.
 Somehow, the client would receive the file, but the browser couldn't interpret it. The output provided another clue: The MIME-type sent by the server is empty and <code>nosniff</code> was set in the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options"><code>X-Content-Type-Options</code></a>. <code>nosniff</code> tells browsers to not read the file headers of style sheets and scripts to infer its type. This is done for security purposes.</p>
 <p>This could be verified by looking at the <code>Network</code> tab, which shows the browser trying to load the style sheet multiple times and blocking it as a result of the empty MIME type.</p>
 
@@ -649,7 +649,7 @@ sequenceDiagram
         </p>
         
         <p class="credits theme-by text-muted">
-          <a href="https://gohugo.io">Hugo v0.60.1</a> powered &nbsp;&bull;&nbsp; Theme <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a> adapted from <a href="https://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a>
+          <a href="https://gohugo.io">Hugo v0.62.2</a> powered &nbsp;&bull;&nbsp; Theme <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a> adapted from <a href="https://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a>
           &nbsp;&bull;&nbsp;[<a href="https://github.com/draggeta/blog/tree/92b12038eace636738e53fad655b169d36746064">92b12038</a>]
         </p>
       </div>
