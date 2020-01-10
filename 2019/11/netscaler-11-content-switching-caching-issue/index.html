@@ -59,7 +59,7 @@
   "headline": "Netscaler 11 content switching caching issue",
   "description" : "Flooding at Cache River ©U.S. Fish and Wildlife Service Southeast Region\n    TL;DR: Netscalers have an Integrated Cache feature which can cache files even if not licensed. The cache can store corrupted or outdated files. The only way I found to clear the cache in this situation is with an HA failover or a reboot.\n I recently had an interesting issue to troubleshoot: A client was having issues with specifically the Outlook Web Access (OWA) on their Exchange servers, but only when accessed from the internet.",
   "inLanguage" : "en",
-  "wordCount":  935 ,
+  "wordCount":  950 ,
   "datePublished" : "2019-11-20T00:48:53",
   "dateModified" : "2019-11-20T00:48:53",
   "image" : "https:\/\/stronglybranched.io\/img\/avatar-icon.svg",
@@ -259,7 +259,7 @@
     &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;5&nbsp;minutes
   
   
-    &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;935&nbsp;words
+    &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;950&nbsp;words
   
   
     
@@ -304,9 +304,15 @@
 </blockquote>
 <p>I recently had an interesting issue to troubleshoot: A client was having issues with specifically the <code>Outlook Web Access</code> (OWA) on their Exchange servers, but only when accessed from the internet. Composing messages was essentially broken. None of the buttons worked and users could not type text in the body. When accessed internally, everything worked as intended.</p>
 <p><!-- raw HTML omitted -->A diagram of the topology:<!-- raw HTML omitted --></p>
-<script async src="https://unpkg.com/mermaid@8.4.2/dist/mermaid.min.js">
-    mermaid.initialize({ startOnLoad: true });
+<script async src="https://unpkg.com/mermaid@8.4.4/dist/mermaid.min.js">
+    mermaid.initialize({
+        startOnLoad: true,
+        flowchart: {
+            useMaxWidth: true
+        }
+    });
 </script>
+
 
 <div class="mermaid" align="left">
     
@@ -324,6 +330,7 @@ graph LR
   LB --- E3[Exchange]
 
 </div>
+
 
 <p>As the diagram shows, both the connections from the inside and outside went through the Netscaler. The only difference was that the external connection went through an additional <code>Content Switching Virtual Server</code> (CSVS).</p>
 <h2 id="jumping-in">Jumping in</h2>
@@ -358,9 +365,15 @@ Somehow, the client would receive the file, but the browser couldn't interpret i
 </ol>
 <p>After some searching online, it turned out that Netscalers do have a caching feature (Integrated Cache), but it needs to be licensed. Well, these devices didn't have the feature licensed, but seemingly they were still caching. While scratching my head, I found <a href="https://discussions.citrix.com/topic/388657-netscaler-caches-files-even-if-integrated-cache-is-not-licensed-disabled/">this forum post</a>. This gave me the impression that the caching feature is enabled by default, but unmanageable if not licensed.</p>
 <p>This required me to change the topology in my head to something more akin to this:</p>
-<script async src="https://unpkg.com/mermaid@8.4.2/dist/mermaid.min.js">
-    mermaid.initialize({ startOnLoad: true });
+<script async src="https://unpkg.com/mermaid@8.4.4/dist/mermaid.min.js">
+    mermaid.initialize({
+        startOnLoad: true,
+        flowchart: {
+            useMaxWidth: true
+        }
+    });
 </script>
+
 
 <div class="mermaid" align="left">
     
@@ -380,13 +393,20 @@ graph LR
 
 </div>
 
+
 <p>All the pieces started falling into place. I'm still not 100% sure what happened. At a certain point in time, while the file was being transferred from the Exchange server to the Netscaler, the transfer must have failed (see the highlighted area below). This failure was cached by the Netscaler and sent to all clients requesting the file. Due to the fact that it was a partial file with no MIME data, the file wasn't even opened by the browser as <code>nosniff</code> was set.</p>
 <blockquote>
 <p><strong>Note:</strong> I don't know the inner workings of Netscalers; the flow described below is a guess, inferred from observations. It may well be that the cache is between the CSVS and LBVS or even in front of the CSVS.</p>
 </blockquote>
-<script async src="https://unpkg.com/mermaid@8.4.2/dist/mermaid.min.js">
-    mermaid.initialize({ startOnLoad: true });
+<script async src="https://unpkg.com/mermaid@8.4.4/dist/mermaid.min.js">
+    mermaid.initialize({
+        startOnLoad: true,
+        flowchart: {
+            useMaxWidth: true
+        }
+    });
 </script>
+
 
 <div class="mermaid" align="left">
     
@@ -407,6 +427,7 @@ sequenceDiagram
   CSVS -->> Client: Here's the CSS file
 
 </div>
+
 
 <h2 id="an-annoying-fix">An annoying fix</h2>
 <p>The problem was now identified, but I still had an issue: How to fix this? Clearing the cache is the obvious solution, but if the <code>Integrated Cache</code> feature is not licensed, there is no way to empty it with a command or via the GUI.</p>
