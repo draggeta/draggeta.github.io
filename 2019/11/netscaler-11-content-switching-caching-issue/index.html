@@ -57,9 +57,9 @@
     "name" : "Tony Fortes Ramos"
   },
   "headline": "Netscaler 11 content switching caching issue",
-  "description" : "Flooding at Cache River ©U.S. Fish and Wildlife Service Southeast Region\n    TL;DR: Netscalers have an Integrated Cache feature which can cache files even if not licensed. The cache can store corrupted or outdated files. The only way I found to clear the cache in this situation is with an HA failover or a reboot.\n I recently had an interesting issue to troubleshoot: A client was having issues with specifically the Outlook Web Access (OWA) on their Exchange servers, but only when accessed from the internet.",
+  "description" : "Flooding at Cache River ©U.S. Fish and Wildlife Service Southeast Region\n    TL;DR: Netscalers have an Integrated Cache feature which can cache files even if not licensed. This is the default AAA cache. The cache can store corrupted or outdated files. The cache can be disabled completely, but The only way I found to clear the cache, even after disabling, is with an HA failover or a reboot.",
   "inLanguage" : "en",
-  "wordCount":  950 ,
+  "wordCount":  1069 ,
   "datePublished" : "2019-11-20T00:48:53",
   "dateModified" : "2019-11-20T00:48:53",
   "image" : "https:\/\/stronglybranched.io\/img\/avatar-icon.svg",
@@ -253,13 +253,13 @@
   
   <i class="fas fa-calendar"></i>&nbsp;Posted on Nov 20, 2019
   
-    &nbsp;(Last modified on Dec 3, 2019)
+    &nbsp;(Last modified on Feb 25, 2020)
   
   
-    &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;5&nbsp;minutes
+    &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;6&nbsp;minutes
   
   
-    &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;950&nbsp;words
+    &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;1069&nbsp;words
   
   
     
@@ -300,7 +300,7 @@
 
 <!-- raw HTML omitted -->
 <blockquote>
-<p><strong>TL;DR:</strong> Netscalers have an <code>Integrated Cache</code> feature which can cache files even if not licensed. The cache can store corrupted or outdated files. The only way I found to clear the cache in this situation is with an HA failover or a reboot.</p>
+<p><strong>TL;DR:</strong> Netscalers have an <code>Integrated Cache</code> feature which can cache files even if not licensed. This is the default AAA cache. The cache can store corrupted or outdated files. The cache can be <a href="#an-annoying-fix">disabled completely</a>, but The only way I found to clear the cache, even after disabling, is with an HA failover or a reboot.</p>
 </blockquote>
 <p>I recently had an interesting issue to troubleshoot: A client was having issues with specifically the <code>Outlook Web Access</code> (OWA) on their Exchange servers, but only when accessed from the internet. Composing messages was essentially broken. None of the buttons worked and users could not type text in the body. When accessed internally, everything worked as intended.</p>
 <p><!-- raw HTML omitted -->A diagram of the topology:<!-- raw HTML omitted --></p>
@@ -430,6 +430,11 @@ sequenceDiagram
 
 
 <h2 id="an-annoying-fix">An annoying fix</h2>
+<blockquote>
+<p><strong>Update:</strong> A reader pointed out that disabling the default authentication page caching, also disables the caching functionality globally. The way to do this was in one of the <a href="https://discussions.citrix.com/topic/388657-netscaler-caches-files-even-if-integrated-cache-is-not-licensed-disabled/#comment-1977305">links in this article</a>, but I assumed that it only disabled the caching for the NS served AAA pages.</p>
+<p>After disabling the caching, the cache remains frozen on the server. After clearing the cache by a reboot or failover, I can confirm that the static content from the Exchange servers weren't being served by the Netscalers anymore.
+The command to disable the caching is <code>set aaa parameter -enableStaticPageCaching NO</code>. Before implementing this, test the impact in your environment.</p>
+</blockquote>
 <p>The problem was now identified, but I still had an issue: How to fix this? Clearing the cache is the obvious solution, but if the <code>Integrated Cache</code> feature is not licensed, there is no way to empty it with a command or via the GUI.</p>
 <p>The only two options I could find are to perform a failover or to reboot the Netscaler, which both clear the cache.</p>
 <p>After clearing the cache, the file finally loaded correcly and OWA functionality was restored.</p>
@@ -600,7 +605,7 @@ sequenceDiagram
         
         <p class="credits theme-by text-muted">
           <a href="https://gohugo.io">Hugo v0.62.2</a> powered &nbsp;&bull;&nbsp; Theme <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a> adapted from <a href="https://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a>
-          &nbsp;&bull;&nbsp;[<a href="https://github.com/draggeta/blog/tree/92b12038eace636738e53fad655b169d36746064">92b12038</a>]
+          &nbsp;&bull;&nbsp;[<a href="https://github.com/draggeta/blog/tree/880d272a3d671b7f1a2606289e9231735d9daa5b">880d272a</a>]
         </p>
       </div>
     </div>
