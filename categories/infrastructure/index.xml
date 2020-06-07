@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>infrastructure on Strongly Branched</title>
+    <link>https://stronglybranched.io/categories/infrastructure/</link>
+    <description>Recent content in infrastructure on Strongly Branched</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <managingEditor>stronglybranched@outlook.com (Tony Fortes Ramos)</managingEditor>
+    <webMaster>stronglybranched@outlook.com (Tony Fortes Ramos)</webMaster>
+    <copyright>©2019</copyright>
+    <lastBuildDate>Sun, 07 Jun 2020 22:15:00 +0200</lastBuildDate>
+    
+	<atom:link href="https://stronglybranched.io/categories/infrastructure/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Azure AD OIDC auth in HashiCorp Vault using Terraform</title>
+      <link>https://stronglybranched.io/2020/06/azure-ad-oidc-auth-in-hashicorp-vault-using-terraform/</link>
+      <pubDate>Sun, 07 Jun 2020 22:15:00 +0200</pubDate>
+      <author>stronglybranched@outlook.com (Tony Fortes Ramos)</author>
+      <guid>https://stronglybranched.io/2020/06/azure-ad-oidc-auth-in-hashicorp-vault-using-terraform/</guid>
+      <description>HashiCorp Vault ©HashiCorp
+   I recently had to set up a HashiCorp Vault server for a client. Due to the requirements, I got to do some new things with regards to Vault authentication. Some of the stated requirements were:
+ Authentication to Vault should be done by using Azure Active Directory Use of Azure AD Application Roles for permissions instead of groups Configure Vault via Terraform  While I&#39;ve done quite a bit with Vault and OAuth 2.</description>
+    </item>
+    
+  </channel>
+</rss>

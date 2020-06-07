@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+  <head>
+    
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>Azure AD OIDC auth in HashiCorp Vault using Terraform - Strongly Branched</title>
+  <meta name="description" content="Configuring Azure AD with Azure AD App Roles as an OIDC authentication backend in HashiCorp Vault using Terraform">
+  <meta name="author" content="Tony Fortes Ramos"/><script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "WebSite",
+    "name": "Strongly Branched",
+    
+    "url": "https:\/\/stronglybranched.io\/"
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "name": "",
+  "url": "https:\/\/stronglybranched.io\/"
+  
+  
+  
+  
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@id": "https:\/\/stronglybranched.io\/",
+          "name": "home"
+        }
+    },{
+        "@type": "ListItem",
+        "position": 3,
+        "item": {
+          "@id": "https:\/\/stronglybranched.io\/2020\/06\/azure-ad-oidc-auth-in-hashicorp-vault-using-terraform\/",
+          "name": "Azure a d o i d c auth in hashi corp vault using terraform"
+        }
+    }]
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Article",
+  "author": {
+    "name" : "Tony Fortes Ramos"
+  },
+  "headline": "Azure AD OIDC auth in HashiCorp Vault using Terraform",
+  "description" : "HashiCorp Vault ©HashiCorp\n   I recently had to set up a HashiCorp Vault server for a client. Due to the requirements, I got to do some new things with regards to Vault authentication. Some of the stated requirements were:\n Authentication to Vault should be done by using Azure Active Directory Use of Azure AD Application Roles for permissions instead of groups Configure Vault via Terraform  While I\x27ve done quite a bit with Vault and OAuth 2.",
+  "inLanguage" : "en",
+  "wordCount":  1828 ,
+  "datePublished" : "2020-06-07T22:15:00",
+  "dateModified" : "2020-06-07T22:15:00",
+  "image" : "https:\/\/stronglybranched.io\/img\/avatar-icon.svg",
+  "keywords" : [ "hashicorp, vault, terraform, azure ad, app roles, oidc" ],
+  "mainEntityOfPage" : "https:\/\/stronglybranched.io\/2020\/06\/azure-ad-oidc-auth-in-hashicorp-vault-using-terraform\/",
+  "publisher" : {
+    "@type": "Organization",
+    "name" : "https:\/\/stronglybranched.io\/",
+    "logo" : {
+        "@type" : "ImageObject",
+        "url" : "https:\/\/stronglybranched.io\/img\/avatar-icon.svg",
+        "height" :  60 ,
+        "width" :  60
+    }
+  }
+}
+</script>
+
+<meta property="og:title" content="Azure AD OIDC auth in HashiCorp Vault using Terraform" />
+<meta property="og:description" content="Configuring Azure AD with Azure AD App Roles as an OIDC authentication backend in HashiCorp Vault using Terraform">
+<meta property="og:image" content="https://stronglybranched.io/2020/06/azure-ad-oidc-auth-in-hashicorp-vault-using-terraform/media/title.png" />
+<meta property="og:url" content="https://stronglybranched.io/2020/06/azure-ad-oidc-auth-in-hashicorp-vault-using-terraform/" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Strongly Branched" />
+
+  <meta name="twitter:title" content="Azure AD OIDC auth in HashiCorp Vault using Terraform" />
+  <meta name="twitter:description" content="Configuring Azure AD with Azure AD App Roles as an OIDC authentication backend in HashiCorp Vault using Terraform">
+  <meta name="twitter:image" content="https://stronglybranched.io/2020/06/azure-ad-oidc-auth-in-hashicorp-vault-using-terraform/media/title.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@draggeta" />
+  <meta name="twitter:creator" content="@draggeta" />
+  <link href='https://stronglybranched.io/img/favicon.ico' rel='icon' type='image/x-icon'/>
+  <meta name="generator" content="Hugo 0.62.2" />
+  <link rel="alternate" href="https://stronglybranched.io/index.xml" type="application/rss+xml" title="Strongly Branched"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><link rel="stylesheet" href="https://stronglybranched.io/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" /><link rel="stylesheet" href="https://stronglybranched.io/css/syntax.css" /><link rel="stylesheet" href="https://stronglybranched.io/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous"><link rel="stylesheet" href="https://stronglybranched.io/css/staticman-custom.css" />
+
+
+
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://stronglybranched.io/">Strongly Branched</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="Home" href="/">Home</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="Archives" href="/posts/">Archives</a>
+            </li>
+          
+        
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent">Meta</a>
+              <div class="navlinks-children">
+                
+                  <a href="/categories/">Categories</a>
+                
+                  <a href="/tags/">Tags</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li>
+              <a title="About" href="/about/">About</a>
+            </li>
+          
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    
+      <div class="avatar-container">
+        <div class="avatar-img-border">
+          <a title="Strongly Branched" href="https://stronglybranched.io/">
+            <img class="avatar-img" src="https://stronglybranched.io/img/avatar-icon.svg" alt="Strongly Branched" />
+          </a>
+        </div>
+      </div>
+    
+
+  </div>
+</nav>
+
+
+
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
+  
+  
+  
+
+
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="post-heading">
+              
+                <h1>Azure AD OIDC auth in HashiCorp Vault using Terraform</h1>
+              
+              
+              
+                
+                  <h2 class="post-subheading">Configuring Azure AD with Azure AD App Roles as an OIDC authentication backend in HashiCorp Vault using Terraform</h2>
+                
+              
+              
+                <span class="post-meta">
+  
+  
+  <i class="fas fa-calendar"></i>&nbsp;Posted on Jun 7, 2020
+  
+  
+    &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;9&nbsp;minutes
+  
+  
+    &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;1828&nbsp;words
+  
+  
+    
+      &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;Tony Fortes Ramos
+    
+  
+  
+</span>
+
+
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        
+<link rel="stylesheet" href="https://stronglybranched.io/css/hugo-easy-gallery.css" />
+<div class="box fancy-figure caption-position-bottom caption-effect-fade" style="max-width:1000">
+  <figure  itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+    <div class="img">
+      <img itemprop="thumbnail" src="./media/title.png" alt="Stylized HashiCorp Vault diagram"/>
+    </div>
+    <a href="./media/title.png" itemprop="contentUrl"></a>
+      <figcaption>
+          <p>HashiCorp Vault ©HashiCorp</p>
+      </figcaption>
+  </figure>
+</div>
+
+<p>I recently had to set up a <a href="https://www.vaultproject.io/">HashiCorp Vault</a> server for a client. Due to the requirements, I got to do some new things with regards to Vault authentication. Some of the stated requirements were:</p>
+<ol>
+<li>Authentication to Vault should be done by using <a href="https://azure.microsoft.com/en-us/services/active-directory/">Azure Active Directory</a></li>
+<li>Use of <a href="https://docs.microsoft.com/en-us/azure/architecture/multitenant-identity/app-roles">Azure AD Application Roles</a> for permissions instead of groups</li>
+<li>Configure Vault via <a href="https://www.terraform.io/">Terraform</a></li>
+</ol>
+<p>While I've done quite a bit with Vault and <a href="https://oauth.net/2/">OAuth 2.0</a>/<a href="https://openid.net/connect/">OpenID Connect</a>, I've never had to use OIDC as an authenticatio backend in Vault. The few setups I've done before all used LDAP as their external authentication source.</p>
+<p>Thankfully, the <a href="https://www.vaultproject.io/docs/auth/jwt_oidc_providers#azure-active-directory-aad">documentation</a> for setting up Azure AD authentication is quite clear. It describes all the steps to take. This post makes use of the information, but adapts it to the requirements and uses Terraform to apply the configuration to Vault.</p>
+<h2 id="start-the-vault-server">Start the Vault Server</h2>
+<p>Let's start with the easy part: starting a development Vault server. If you don't know how to install Vault, there is a <a href="https://learn.hashicorp.com/vault/getting-started/install">guide</a> on the Vault site.</p>
+<p>Set the <code>VAULT_ADDR</code> environment variable to <code>http://127.0.0.1:8200</code> as we'll be running a dev server. This environment variable tells the client where to reach the running Vault server. The root token (for authentication) will be hardcoded for simplicity. As some troubleshooting may be required, the log level is set to debug.</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="err">❯</span> <span class="nv">$env:VAULT_ADDR</span> <span class="p">=</span>  <span class="s2">&#34;</span><span class="s2">http://127.0.0.1:8200</span><span class="s2">&#34;</span>
+<span class="err">❯</span> <span class="nv">$rootToken</span> <span class="p">=</span> <span class="nb">New-Guid</span>
+<span class="err">❯</span> <span class="n">vault</span> <span class="n">server</span> <span class="n">-dev</span> <span class="n">-dev</span><span class="n">-root</span><span class="n">-token</span><span class="n">-id</span> <span class="nv">$rootToken</span> <span class="n">-log</span><span class="n">-level</span> <span class="n">debug</span>
+</code></pre></div><p>The server is now started and will output to stdout. If you ever need to reauthenticate, use the <code>vault login</code> command and enter the root token after the prompt.</p>
+<h2 id="setting-up-the-azure-ad-application">Setting up the Azure AD Application</h2>
+<p>To log in to Vault with Azure AD, we need an App Registration and an Enterprise Application. The configuration of Azure AD will be done via the Azure Portal. This simplifies the setup as it does some things under the hood we might have to do manually otherwise. Furthermore, it's quite possible that the person setting up Vault doesn't have access to Azure AD.</p>
+<ol>
+<li>Create the App Registration. This automatically creates the Enterprise Application as well.</li>
+<li>Configure both redirect URIs in the App Registration.
+<ul>
+<li><code>http://localhost:8250/oidc/callback</code> for CLI access.</li>
+<li><code>http://localhost:8200/ui/vault/auth/oidc/oidc/callbackRegister</code> for the web UI. If the server is not running locally, adjust the protocol, FQDN and port accordingly.</li>
+</ul>
+</li>
+<li>Copy the following information from the App Registration:
+<ul>
+<li>The Application/Client ID in the &lsquo;Overview&rsquo; section</li>
+<li>The &lsquo;OpenID Connect metadata document&rsquo; URL found by clicking &lsquo;Endpoints&rsquo; in the &lsquo;Overview&rsquo; section.</li>
+<li>A client secret generated in the &lsquo;Certificates &amp; secrets&rsquo; section.</li>
+</ul>
+</li>
+</ol>
+<p>Two steps from the documentation can be ignored as we'll be using Azure AD Application Roles. First, no additional API permissions need to be granted. Second, no group membership claims need to be provided either. This means that in the &lsquo;Manifest&rsquo; in the sidebar, <code>groupMembershipClaims</code>'s value should remain <code>null</code>.</p>
+<h2 id="setting-up-the-azure-ad-application-roles">Setting up the Azure AD Application Roles</h2>
+<p>App Roles have some advantages over using group claims. Most Enterprises end up with users being members of lots of groups. So many even, that often the groups don't all fit in a token. One option to fix this is to increase the token size limit, but increasing the limit isn't a fix in all scenarios. By mapping users and/or groups to a few Azure AD Application Roles, only the roles assigned to the user for this app get added to the token, keeping the token size small.</p>
+<p>App Roles are configured in the manifest file. For details on their structure, look at the <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/reference-app-manifest#approles-attribute">documentation</a>. In our case, we're going to create two Roles: <code>VaultUser</code> and <code>VaultAdmin</code>. To do this, add the following JSON to the <code>appRoles</code> attribute in the App Registration Manifest:</p>
+<div class="highlight"><pre class="chroma"><code class="language-json" data-lang="json"><span class="s2">&#34;appRoles&#34;</span><span class="err">:</span> <span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nt">&#34;allowedMemberTypes&#34;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="s2">&#34;User&#34;</span>
+    <span class="p">]</span><span class="p">,</span>
+    <span class="nt">&#34;description&#34;</span><span class="p">:</span> <span class="s2">&#34;Administrators can manage Vault&#34;</span><span class="p">,</span>
+    <span class="nt">&#34;displayName&#34;</span><span class="p">:</span> <span class="s2">&#34;VaultAdmin&#34;</span><span class="p">,</span>
+    <span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;3f94b3c9-b6f3-48a9-bc88-5dfa85fb100d&#34;</span><span class="p">,</span>
+    <span class="nt">&#34;isEnabled&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nt">&#34;value&#34;</span><span class="p">:</span> <span class="s2">&#34;VaultAdmin&#34;</span>
+  <span class="p">}</span><span class="p">,</span>
+  <span class="p">{</span>
+    <span class="nt">&#34;allowedMemberTypes&#34;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="s2">&#34;User&#34;</span>
+    <span class="p">]</span><span class="p">,</span>
+    <span class="nt">&#34;description&#34;</span><span class="p">:</span> <span class="s2">&#34;Users can access Vault&#34;</span><span class="p">,</span>
+    <span class="nt">&#34;displayName&#34;</span><span class="p">:</span> <span class="s2">&#34;VaultUser&#34;</span><span class="p">,</span>
+    <span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;8a4ebd97-ae67-40f2-9b7b-184c216dc0d0&#34;</span><span class="p">,</span>
+    <span class="nt">&#34;isEnabled&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nt">&#34;value&#34;</span><span class="p">:</span> <span class="s2">&#34;VaultUser&#34;</span>
+  <span class="p">}</span>
+<span class="p">]</span><span class="err">,</span>
+</code></pre></div><p>The <code>id</code> attribute is a GUID. This GUID must be unique within the manifest. The value of the <code>Value</code> attribute is what is added to the role claim.</p>
+<p>To assign the App Role to users or groups, go to the &lsquo;Enterprise Application&rsquo;, open &lsquo;Users and groups&rsquo; and add a group or user. Here, select one of the previously defined roles to attach to the groups or users.</p>
+<p>You'll end up with a screen similar to this screenshot after assigning the App Role:</p>
+
+
+<div class="box fancy-figure caption-position-bottom caption-effect-fade" style="max-width:1000">
+  <figure  itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+    <div class="img">
+      <img itemprop="thumbnail" src="./media/user_app_roles.png" alt="List of three users with their assigned Azure AD Application Roles. The users are Anthony, Scholastica and Isodore."/>
+    </div>
+    <a href="./media/user_app_roles.png" itemprop="contentUrl"></a>
+      <figcaption>
+          <p>Users with App Roles</p>
+      </figcaption>
+  </figure>
+</div>
+
+<h2 id="configure-authentication-with-azure-ad-in-vault">Configure authentication with Azure AD in Vault</h2>
+<p>To configure the <a href="https://www.vaultproject.io/docs/auth">authentication backend</a> in Vault, we'll need the client ID, metadata URL and the client secret we copied from the Azure AD App Registration.</p>
+<p>We'll use use the <a href="https://www.terraform.io/docs/providers/vault/r/jwt_auth_backend.html"><code>vault_jwt_auth_backend</code></a> Terraform resource and fill in the correct values.</p>
+<ul>
+<li><code>path</code> can be anything, but using the default of <code>oidc</code> makes everything easier.</li>
+<li><code>type</code> must be set to <code>oidc</code>.</li>
+<li>The <code>oidc_discovery_url</code> is the manifest URL, without &lsquo;.wellknown/openid-configuration&rsquo;.</li>
+<li><code>oidc_client_id</code> is the client ID found in the overview and <code>oidc_client_secret</code> is the generated secret.</li>
+</ul>
+<p>The resource should be placed in a .tf file. In my case, main.tf. This is what the resource ends up looking like:</p>
+<div class="highlight"><pre class="chroma"><code class="language-hcl" data-lang="hcl"><span class="c1"># main.tf
+</span><span class="c1"></span><span class="k">resource</span> <span class="s2">&#34;vault_jwt_auth_backend&#34; &#34;azure_oidc&#34;</span> {
+<span class="n">  description</span> <span class="o">=</span> <span class="s2">&#34;Azure Authentication&#34;</span>
+<span class="n">  path</span>        <span class="o">=</span> <span class="s2">&#34;oidc&#34;</span>
+<span class="n">  type</span>        <span class="o">=</span> <span class="s2">&#34;oidc&#34;</span>
+
+<span class="n">  oidc_discovery_url</span> <span class="o">=</span> <span class="s2">&#34;https://login.microsoftonline.com/e9c80aca-2294-4619-8f10-888f8b6682e8/v2.0&#34;</span>
+<span class="n">  oidc_client_id</span>     <span class="o">=</span> <span class="s2">&#34;6d14e904-1d87-483e-82e3-8bc513e15c0d&#34;</span>
+<span class="n">  oidc_client_secret</span> <span class="o">=</span><span class="n"> &#34;2n08rIqfH</span><span class="o">=</span><span class="k">PJ</span><span class="err">@</span><span class="k">pGy_jh3</span><span class="err">!</span><span class="k">eNSFC</span><span class="err">?</span><span class="k">_Vh_9</span><span class="err">&#34;</span>
+}
+</code></pre></div><blockquote>
+<p><strong>NOTE:</strong> In production, don't specify the secret in the template. Use a secret store like Vault.</p>
+</blockquote>
+<p>This configures the auth backend, but logging in isn't possible yet. We need to configure at least one Vault OIDC role to allow that.</p>
+<h2 id="grant-basic-access-with-an-oidc-role">Grant basic access with an OIDC role</h2>
+<p>An OIDC role in Vault defines restrictions on who can log in to Vault and which permissions they'll acquire by using claims. Multiple roles can exist for a given OIDC auth backend and each role can grant different permissions via the policies assigned to a Vault OIDC Role.</p>
+<p>A role also defines the contract between Vault and Azure AD, specifying the expected information and the redirect URIs.</p>
+<p>We're going to keep things simple and specify no restrictions, allowing all users in the Azure Active Directory tenant to log in and receive the default permissions.</p>
+<p>To configure the OIDC Role, use the <a href="https://www.terraform.io/docs/providers/vault/r/jwt_auth_backend_role.html"><code>vault_jwt_auth_backend_role</code></a> resource.</p>
+<ul>
+<li>The <code>user_claim</code> should be <code>email</code>.</li>
+<li>The <code>role_type</code> is <code>oidc</code></li>
+<li>the <code>allowed_redirect_uris</code> should be the same as what was configured in the App Registration.</li>
+<li>To make use of the role claims, set the  <code>groups_claim</code> to <code>roles</code> instead of <code>groups</code>.</li>
+<li>The required scopes for Azure AD are the default OIDC scopes <code>profile</code> and <code>email</code>, as well as the Azure specific <code>https://graph.microsoft.com/.default</code>. <code>openid</code> doesn't need to be specified as it's included by default.</li>
+</ul>
+<p>This results in a resource that looks like this:</p>
+<div class="highlight"><pre class="chroma"><code class="language-hcl" data-lang="hcl"><span class="c1"># main.tf
+</span><span class="c1"></span><span class="k">resource</span> <span class="s2">&#34;vault_jwt_auth_backend_role&#34; &#34;azure_oidc_user&#34;</span> {
+<span class="n">  backend</span>        <span class="o">=</span> <span class="k">vault_jwt_auth_backend</span><span class="p">.</span><span class="k">azure_oidc</span><span class="p">.</span><span class="k">path</span>
+<span class="n">  role_name</span>      <span class="o">=</span> <span class="s2">&#34;oidc&#34;</span>
+<span class="n">  token_policies</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;default&#34;</span><span class="p">]</span>
+
+<span class="n">  user_claim</span>            <span class="o">=</span> <span class="s2">&#34;email&#34;</span>
+<span class="n">  role_type</span>             <span class="o">=</span> <span class="s2">&#34;oidc&#34;</span>
+<span class="n">  allowed_redirect_uris</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;http://localhost:8250/oidc/callback&#34;, &#34;http://localhost:8200/ui/vault/auth/oidc/oidc/callback&#34;</span><span class="p">]</span>
+<span class="n">  groups_claim</span>          <span class="o">=</span> <span class="s2">&#34;roles&#34;</span>
+<span class="n">  oidc_scopes</span>           <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;https://graph.microsoft.com/.default&#34;, &#34;profile&#34;, &#34;email&#34;</span><span class="p">]</span>
+
+<span class="hl"><span class="n">  verbose_oidc_logging</span> <span class="o">=</span> <span class="kt">true</span>
+</span>}</code></pre></div>
+<blockquote>
+<p><strong>NOTE:</strong> Don't set <code>verbose_oidc_logging = true</code> in production. This logs sensitive information to stdout and the audit logs. Use it only to troubleshoot the setup of the authentication.</p>
+</blockquote>
+<p>Add this to the .tf file and apply the Terraform configuration. If everything went well, logging in should now be possible.</p>
+<h3 id="testing-the-login">Testing the login</h3>
+<p>To log in to the web UI, visit the website - in this case http://localhost:8200 - select &lsquo;OIDC&rsquo; as the login method and type &lsquo;oidc&rsquo; as the role, then click on &lsquo;Sign in with OIDC Provider&rsquo;.</p>
+
+
+<div class="box fancy-figure caption-position-bottom caption-effect-fade" style="max-width:1000">
+  <figure  itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+    <div class="img">
+      <img itemprop="thumbnail" src="./media/sign_in_web_ui.png" alt="The login page to log in to the Vault web UI, with OIDC as the selected method."/>
+    </div>
+    <a href="./media/sign_in_web_ui.png" itemprop="contentUrl"></a>
+      <figcaption>
+          <p>Login page for the web UI</p>
+      </figcaption>
+  </figure>
+</div>
+
+<p>Logging in via the CLI is equally simple. Use the <code>vault login</code> command with <code>-method</code> set to  <code>oidc</code> and <code>role=oidc</code> as a key-value pair to log in.</p>
+<p>The <code>role</code> parameter allows a user to specify their desired OIDC role to assume. The value to specify is the value of <code>role_name</code> configured on the <code>vault_jwt_auth_backend_role</code> resource.</p>
+<p>Type the command listed below and press enter. Your default browser should pop up, allowing you to authenticate. After logging in with user &lsquo;Isidore&rsquo;, this is the CLI output.</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="err">❯</span> <span class="n">vault</span> <span class="n">login</span> <span class="n">-method</span> <span class="n">oidc</span> <span class="n">role</span><span class="p">=</span><span class="n">oidc</span>
+<span class="p">[</span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="p">]</span>
+<span class="n">Success</span><span class="p">!</span> <span class="n">You</span> <span class="n">are</span> <span class="n">now</span> <span class="n">authenticated</span><span class="p">.</span> <span class="p">[</span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="p">]</span>
+
+<span class="n">Key</span>                  <span class="n">Value</span>
+<span class="p">-</span><span class="p">-</span><span class="p">-</span>                  <span class="p">-</span><span class="p">-</span><span class="p">-</span><span class="p">-</span><span class="p">-</span>
+<span class="n">token</span>                <span class="n">s</span><span class="p">.</span><span class="n">VMuTszWc8xSswCuhfGmoScLy</span>
+<span class="n">token_accessor</span>       <span class="n">rbbsrBCb2b4jCjwtiB4HGpZV</span>
+<span class="n">token_duration</span>       <span class="n">768h</span>
+<span class="n">token_renewable</span>      <span class="n">true</span>
+<span class="n">token_policies</span>       <span class="p">[</span><span class="s2">&#34;</span><span class="s2">default</span><span class="s2">&#34;</span><span class="p">]</span>
+<span class="n">identity_policies</span>    <span class="p">[</span><span class="p">]</span>
+<span class="n">policies</span>             <span class="p">[</span><span class="s2">&#34;</span><span class="s2">default</span><span class="s2">&#34;</span><span class="p">]</span>
+<span class="n">token_meta_role</span>      <span class="n">oidc</span>
+</code></pre></div><p>Success! We have logged in; however, we only received the default policy. Let's fix this.</p>
+<h2 id="map-the-app-roles-to-external-groups">Map the App Roles to external groups</h2>
+<p>Now that the login is successful, we need to assign permissions in Vault based on the received App Roles. To do this, we must use the concept of identity groups in Vault. Read the <a href="https://learn.hashicorp.com/vault/identity-access-management/iam-identity">documentation</a> on them to learn more.</p>
+<p>As the group information comes from Azure AD, we must use external groups and assign them aliases pointing to the roles in Azure AD. This must be done for any App Role we want to assign permissions to. In this case, these are the &lsquo;VaultUser&rsquo; and &lsquo;VaultAdmin&rsquo; roles.</p>
+<p>To create the external groups, we'll use the <a href="https://www.terraform.io/docs/providers/vault/r/identity_group.html"><code>vault_identity_group</code></a> resource. The groups will be named &lsquo;user&rsquo; and &lsquo;admin&rsquo;.</p>
+<div class="highlight"><pre class="chroma"><code class="language-hcl" data-lang="hcl"><span class="c1"># main.tf
+</span><span class="c1"></span><span class="k">resource</span> <span class="s2">&#34;vault_identity_group&#34; &#34;user&#34;</span> {
+<span class="n">  name</span>     <span class="o">=</span> <span class="s2">&#34;user&#34;</span>
+<span class="n">  type</span>     <span class="o">=</span> <span class="s2">&#34;external&#34;</span>
+<span class="hl"><span class="n">  policies</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;user&#34;</span><span class="p">]</span>
+</span>}
+
+<span class="k">resource</span> <span class="s2">&#34;vault_identity_group&#34; &#34;admin&#34;</span> {
+<span class="n">  name</span>     <span class="o">=</span> <span class="s2">&#34;admin&#34;</span>
+<span class="n">  type</span>     <span class="o">=</span> <span class="s2">&#34;external&#34;</span>
+<span class="hl"><span class="n">  policies</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;admin&#34;</span><span class="p">]</span>
+</span>}</code></pre></div>
+<p>After applying the above configuration, we now have two external groups in Vault. Each assign their highlighted policies to anyone or any group that is a member of the external group. To couple our OIDC roles to the external groups, we need to create aliases telling Vault that the OIDC roles received in the token, are part of specific external groups. Use the <a href="https://www.terraform.io/docs/providers/vault/r/identity_group_alias.html"><code>vault_identity_group_alias</code></a> resource to accomplish this.</p>
+<div class="highlight"><pre class="chroma"><code class="language-hcl" data-lang="hcl"><span class="c1"># main.tf
+</span><span class="c1"></span><span class="k">resource</span> <span class="s2">&#34;vault_identity_group_alias&#34; &#34;user_alias_azure_vault_user&#34;</span> {
+<span class="n">  name</span>           <span class="o">=</span> <span class="s2">&#34;VaultUser&#34;</span>
+<span class="n">  mount_accessor</span> <span class="o">=</span> <span class="k">vault_jwt_auth_backend</span><span class="p">.</span><span class="k">azure_oidc</span><span class="p">.</span><span class="k">accessor</span>
+<span class="n">  canonical_id</span>   <span class="o">=</span> <span class="k">vault_identity_group</span><span class="p">.</span><span class="k">user</span><span class="p">.</span><span class="k">id</span>
+}
+
+<span class="k">resource</span> <span class="s2">&#34;vault_identity_group_alias&#34; &#34;admin_alias_azure_vault_admin&#34;</span> {
+<span class="n">  name</span>           <span class="o">=</span> <span class="s2">&#34;VaultAdmin&#34;</span>
+<span class="n">  mount_accessor</span> <span class="o">=</span> <span class="k">vault_jwt_auth_backend</span><span class="p">.</span><span class="k">azure_oidc</span><span class="p">.</span><span class="k">accessor</span>
+<span class="n">  canonical_id</span>   <span class="o">=</span> <span class="k">vault_identity_group</span><span class="p">.</span><span class="k">admin</span><span class="p">.</span><span class="k">id</span>
+}
+</code></pre></div><p>After applying the configuration via Terraform, we can now try to log in with the user Isidore.</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="err">❯</span> <span class="n">vault</span> <span class="n">login</span> <span class="n">-method</span> <span class="n">oidc</span> <span class="n">role</span><span class="p">=</span><span class="n">oidc</span>
+<span class="p">[</span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="p">]</span>
+<span class="n">Key</span>                  <span class="n">Value</span>
+<span class="p">-</span><span class="p">-</span><span class="p">-</span>                  <span class="p">-</span><span class="p">-</span><span class="p">-</span><span class="p">-</span><span class="p">-</span>
+<span class="n">token</span>                <span class="n">s</span><span class="p">.</span><span class="n">PiYuUkROgViEt57SWYbmqYZd</span>
+<span class="n">token_accessor</span>       <span class="n">ueK4MVhRWXRUHMe7jCXfqGL7</span>
+<span class="n">token_duration</span>       <span class="n">768h</span>
+<span class="n">token_renewable</span>      <span class="n">true</span>
+<span class="n">token_policies</span>       <span class="p">[</span><span class="s2">&#34;</span><span class="s2">default</span><span class="s2">&#34;</span><span class="p">]</span>
+<span class="n">identity_policies</span>    <span class="p">[</span><span class="s2">&#34;</span><span class="s2">admin</span><span class="s2">&#34;</span><span class="p">]</span>
+<span class="n">policies</span>             <span class="p">[</span><span class="s2">&#34;</span><span class="s2">admin</span><span class="s2">&#34;</span> <span class="s2">&#34;</span><span class="s2">default</span><span class="s2">&#34;</span><span class="p">]</span>
+<span class="n">token_meta_role</span>      <span class="n">oidc</span>
+</code></pre></div><p>Great! Logging in with Anthony and Scholastica also gives the correct <code>identity_policies</code> of <code>[&quot;user&quot;]</code>. This means that our work here is almost done.</p>
+<h2 id="tidying-up-and-conclusion">Tidying up and conclusion</h2>
+<p>We can improve the user experience with a small tweak. Currently we need to specify the role each and every time we log in. To fix this, we're going to make the <code>oidc</code> role the default by adding <code>default_role = &quot;oidc&quot;</code> to the <code>vault_jwt_auth_backend</code> resource:</p>
+<div class="highlight"><pre class="chroma"><code class="language-hcl" data-lang="hcl"><span class="c1"># main.tf
+</span><span class="c1"></span><span class="k">resource</span> <span class="s2">&#34;vault_jwt_auth_backend&#34; &#34;azure_oidc&#34;</span> {
+<span class="n">  description</span> <span class="o">=</span> <span class="s2">&#34;Azure Authentication&#34;</span>
+  <span class="p">[</span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="p">]</span>
+
+<span class="hl"><span class="n">  default_role</span> <span class="o">=</span> <span class="s2">&#34;oidc&#34;</span>
+</span>}</code></pre></div>
+<p>This will save some typing on both the web UI and the CLI. To log in via the CLI, omit the role key to use the default role:</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">vault</span> <span class="n">login</span> <span class="n">-method</span> <span class="n">oidc</span>
+</code></pre></div><p>The examples in this post focused solely on the authentication. The policy definitions are one of the missing pieces. Another is the TTL adjustments to the Vault token lifetimes. A more complete example containing some of the missing pieces can be found in my GitHub <a href="https://github.com/draggeta/blog/tree/master/content/posts/2020/azure-ad-oidc-auth-in-hashicorp-vault-using-terraform/code">here</a>.</p>
+<p>I hope this article can be helpful in some way. Until next time!</p>
+
+
+        
+          <div class="blog-tags">
+            
+              <a href="https://stronglybranched.io//tags/hashicorp/">hashicorp</a>&nbsp;
+            
+              <a href="https://stronglybranched.io//tags/vault/">vault</a>&nbsp;
+            
+              <a href="https://stronglybranched.io//tags/terraform/">terraform</a>&nbsp;
+            
+              <a href="https://stronglybranched.io//tags/azure-ad/">azure ad</a>&nbsp;
+            
+              <a href="https://stronglybranched.io//tags/app-roles/">app roles</a>&nbsp;
+            
+              <a href="https://stronglybranched.io//tags/oidc/">oidc</a>&nbsp;
+            
+          </div>
+        
+
+        
+            <hr/>
+            <section id="social-share">
+              <div class="list-inline footer-links">
+                
+
+<div class="share-box" aria-hidden="true">
+    <ul class="share">
+      
+      <li>
+        <a href="//twitter.com/share?url=https%3a%2f%2fstronglybranched.io%2f2020%2f06%2fazure-ad-oidc-auth-in-hashicorp-vault-using-terraform%2f&amp;text=Azure%20AD%20OIDC%20auth%20in%20HashiCorp%20Vault%20using%20Terraform&amp;via=draggeta" target="_blank" title="Share on Twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+
+      
+      
+
+      
+      <li>
+        <a href="//reddit.com/submit?url=https%3a%2f%2fstronglybranched.io%2f2020%2f06%2fazure-ad-oidc-auth-in-hashicorp-vault-using-terraform%2f&amp;title=Azure%20AD%20OIDC%20auth%20in%20HashiCorp%20Vault%20using%20Terraform" target="_blank" title="Share on Reddit">
+          <i class="fab fa-reddit"></i>
+        </a>
+      </li>
+
+      
+      <li>
+        <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fstronglybranched.io%2f2020%2f06%2fazure-ad-oidc-auth-in-hashicorp-vault-using-terraform%2f&amp;title=Azure%20AD%20OIDC%20auth%20in%20HashiCorp%20Vault%20using%20Terraform" target="_blank" title="Share on LinkedIn">
+          <i class="fab fa-linkedin"></i>
+        </a>
+      </li>
+
+      
+      <li>
+        <a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fstronglybranched.io%2f2020%2f06%2fazure-ad-oidc-auth-in-hashicorp-vault-using-terraform%2f&amp;title=Azure%20AD%20OIDC%20auth%20in%20HashiCorp%20Vault%20using%20Terraform" target="_blank" title="Share on StumbleUpon">
+          <i class="fab fa-stumbleupon"></i>
+        </a>
+      </li>
+
+      
+      <li>
+        <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fstronglybranched.io%2f2020%2f06%2fazure-ad-oidc-auth-in-hashicorp-vault-using-terraform%2f&amp;description=Azure%20AD%20OIDC%20auth%20in%20HashiCorp%20Vault%20using%20Terraform" target="_blank" title="Share on Pinterest">
+          <i class="fab fa-pinterest"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+  
+
+              </div>
+            </section>
+        
+
+        
+          
+
+          
+        
+      </article>
+
+      
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="https://stronglybranched.io/2020/01/usb-c-device-wont-output-to-a-usb-c-monitor/" data-toggle="tooltip" data-placement="top" title="USB-C device won&#39;t output to a USB-C monitor">&larr; Previous Post</a>
+            </li>
+          
+          
+        </ul>
+      
+
+
+      
+        
+        
+      
+
+    </div>
+  </div>
+</div>
+
+      
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="mailto:stronglybranched@outlook.com" title="Email me">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/draggeta" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://twitter.com/draggeta" title="Twitter">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://linkedin.com/in/antoniofortesramos" title="LinkedIn">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+          <li>
+            <a href="" title="RSS">
+              <span class="fa-stack fa-lg">
+                <i class="fas fa-circle fa-stack-2x"></i>
+                <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+            
+              Tony Fortes Ramos
+            
+          
+
+          &nbsp;&bull;&nbsp;&copy;
+          
+            2020
+          
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://stronglybranched.io/">Strongly Branched</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="https://gohugo.io">Hugo v0.62.2</a> powered &nbsp;&bull;&nbsp; Theme <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a> adapted from <a href="https://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a>
+          &nbsp;&bull;&nbsp;[<a href="https://github.com/draggeta/blog/tree/66a7037dbfa8d073ebb2817a07d49424896d3e8a">66a7037d</a>]
+        </p>
+      </div>
+    </div>
+  </div>
+</footer><script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="https://stronglybranched.io/js/main.js"></script><script> renderMathInElement(document.body); </script><script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script><script src="https://stronglybranched.io/js/load-photoswipe.js"></script>
+
+
+
+
+
+
+
+
+
+    
+  </body>
+</html>
+

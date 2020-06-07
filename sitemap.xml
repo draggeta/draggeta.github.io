@@ -3,23 +3,73 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://stronglybranched.io/tags/app-roles/</loc>
+    <lastmod>2020-06-07T22:19:59+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://stronglybranched.io/tags/azure-ad/</loc>
+    <lastmod>2020-06-07T22:19:59+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://stronglybranched.io/2020/06/azure-ad-oidc-auth-in-hashicorp-vault-using-terraform/</loc>
+    <lastmod>2020-06-07T22:19:59+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://stronglybranched.io/categories/</loc>
+    <lastmod>2020-06-07T22:19:59+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://stronglybranched.io/tags/hashicorp/</loc>
+    <lastmod>2020-06-07T22:19:59+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://stronglybranched.io/categories/infrastructure/</loc>
+    <lastmod>2020-06-07T22:19:59+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://stronglybranched.io/tags/oidc/</loc>
+    <lastmod>2020-06-07T22:19:59+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://stronglybranched.io/posts/</loc>
+    <lastmod>2020-06-07T22:19:59+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://stronglybranched.io/</loc>
+    <lastmod>2020-06-07T22:19:59+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://stronglybranched.io/tags/</loc>
+    <lastmod>2020-06-07T22:19:59+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://stronglybranched.io/tags/terraform/</loc>
+    <lastmod>2020-06-07T22:19:59+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://stronglybranched.io/tags/vault/</loc>
+    <lastmod>2020-06-07T22:19:59+02:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://stronglybranched.io/tags/alt-mode/</loc>
     <lastmod>2020-01-13T00:27:18+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://stronglybranched.io/categories/</loc>
-    <lastmod>2020-06-07T01:18:57+02:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://stronglybranched.io/tags/displayport/</loc>
     <lastmod>2020-01-13T00:27:18+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://stronglybranched.io/posts/</loc>
-    <lastmod>2020-02-25T17:49:53+01:00</lastmod>
   </url>
   
   <url>
@@ -30,16 +80,6 @@
   <url>
     <loc>https://stronglybranched.io/tags/standards/</loc>
     <lastmod>2020-01-13T00:27:18+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://stronglybranched.io/</loc>
-    <lastmod>2020-06-07T01:18:57+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://stronglybranched.io/tags/</loc>
-    <lastmod>2020-06-07T01:18:57+02:00</lastmod>
   </url>
   
   <url>
