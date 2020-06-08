@@ -59,9 +59,9 @@
   "headline": "Azure AD OIDC auth in HashiCorp Vault using Terraform",
   "description" : "HashiCorp Vault ©HashiCorp\n   I recently had to set up a HashiCorp Vault server for a client. Due to the requirements, I got to do some new things with regards to Vault authentication. Some of the stated requirements were:\n Authentication to Vault should be done by using Azure Active Directory Use of Azure AD Application Roles for permissions instead of groups Configure Vault via Terraform  While I\x27ve done quite a bit with Vault and OAuth 2.",
   "inLanguage" : "en",
-  "wordCount":  1828 ,
-  "datePublished" : "2020-06-07T22:15:00",
-  "dateModified" : "2020-06-07T22:15:00",
+  "wordCount":  1902 ,
+  "datePublished" : "2020-06-08T14:15:00",
+  "dateModified" : "2020-06-08T14:15:00",
   "image" : "https:\/\/stronglybranched.io\/img\/avatar-icon.svg",
   "keywords" : [ "hashicorp, vault, terraform, azure ad, app roles, oidc" ],
   "mainEntityOfPage" : "https:\/\/stronglybranched.io\/2020\/06\/azure-ad-oidc-auth-in-hashicorp-vault-using-terraform\/",
@@ -252,13 +252,13 @@
                 <span class="post-meta">
   
   
-  <i class="fas fa-calendar"></i>&nbsp;Posted on Jun 7, 2020
+  <i class="fas fa-calendar"></i>&nbsp;Posted on Jun 8, 2020
   
   
     &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;9&nbsp;minutes
   
   
-    &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;1828&nbsp;words
+    &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;1902&nbsp;words
   
   
     
@@ -307,11 +307,11 @@
 <p>Thankfully, the <a href="https://www.vaultproject.io/docs/auth/jwt_oidc_providers#azure-active-directory-aad">documentation</a> for setting up Azure AD authentication is quite clear. It describes all the steps to take. This post makes use of the information, but adapts it to the requirements and uses Terraform to apply the configuration to Vault.</p>
 <h2 id="start-the-vault-server">Start the Vault Server</h2>
 <p>Let's start with the easy part: starting a development Vault server. If you don't know how to install Vault, there is a <a href="https://learn.hashicorp.com/vault/getting-started/install">guide</a> on the Vault site.</p>
-<p>Set the <code>VAULT_ADDR</code> environment variable to <code>http://127.0.0.1:8200</code> as we'll be running a dev server. This environment variable tells the client where to reach the running Vault server. The root token (for authentication) will be hardcoded for simplicity. As some troubleshooting may be required, the log level is set to debug.</p>
-<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="err">❯</span> <span class="nv">$env:VAULT_ADDR</span> <span class="p">=</span>  <span class="s2">&#34;</span><span class="s2">http://127.0.0.1:8200</span><span class="s2">&#34;</span>
-<span class="err">❯</span> <span class="nv">$rootToken</span> <span class="p">=</span> <span class="nb">New-Guid</span>
+<p>Before starting the server, we're going set some variables. Create a GUID to serve as the root token. The token gives you root permission in Vault. Set the <code>VAULT_ADDR</code> environment variable to <code>http://127.0.0.1:8200</code>. This environment variable tells the client where to reach the running Vault server. As some troubleshooting may be required, the log level is set to debug.</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="err">❯</span> <span class="nv">$rootToken</span> <span class="p">=</span> <span class="nb">New-Guid</span>
+<span class="err">❯</span> <span class="nv">$env:VAULT_ADDR</span> <span class="p">=</span>  <span class="s2">&#34;</span><span class="s2">http://127.0.0.1:8200</span><span class="s2">&#34;</span>
 <span class="err">❯</span> <span class="n">vault</span> <span class="n">server</span> <span class="n">-dev</span> <span class="n">-dev</span><span class="n">-root</span><span class="n">-token</span><span class="n">-id</span> <span class="nv">$rootToken</span> <span class="n">-log</span><span class="n">-level</span> <span class="n">debug</span>
-</code></pre></div><p>The server is now started and will output to stdout. If you ever need to reauthenticate, use the <code>vault login</code> command and enter the root token after the prompt.</p>
+</code></pre></div><p>The server is now started and will output to stdout. If you ever need to reauthenticate as the root user, use the <code>vault login</code> command and enter the root token after the prompt.</p>
 <h2 id="setting-up-the-azure-ad-application">Setting up the Azure AD Application</h2>
 <p>To log in to Vault with Azure AD, we need an App Registration and an Enterprise Application. The configuration of Azure AD will be done via the Azure Portal. This simplifies the setup as it does some things under the hood we might have to do manually otherwise. Furthermore, it's quite possible that the person setting up Vault doesn't have access to Azure AD.</p>
 <ol>
@@ -382,7 +382,7 @@
 <li>The <code>oidc_discovery_url</code> is the manifest URL, without &lsquo;.wellknown/openid-configuration&rsquo;.</li>
 <li><code>oidc_client_id</code> is the client ID found in the overview and <code>oidc_client_secret</code> is the generated secret.</li>
 </ul>
-<p>The resource should be placed in a .tf file. In my case, main.tf. This is what the resource ends up looking like:</p>
+<p>The resource should be placed in a file named &lsquo;main.tf&rsquo;. This is what the resource ends up looking like:</p>
 <div class="highlight"><pre class="chroma"><code class="language-hcl" data-lang="hcl"><span class="c1"># main.tf
 </span><span class="c1"></span><span class="k">resource</span> <span class="s2">&#34;vault_jwt_auth_backend&#34; &#34;azure_oidc&#34;</span> {
 <span class="n">  description</span> <span class="o">=</span> <span class="s2">&#34;Azure Authentication&#34;</span>
@@ -427,7 +427,7 @@
 <blockquote>
 <p><strong>NOTE:</strong> Don't set <code>verbose_oidc_logging = true</code> in production. This logs sensitive information to stdout and the audit logs. Use it only to troubleshoot the setup of the authentication.</p>
 </blockquote>
-<p>Add this to the .tf file and apply the Terraform configuration. If everything went well, logging in should now be possible.</p>
+<p>Add this to the main.tf file and apply the Terraform configuration with <code>terraform apply</code>. If everything went well, logging in should now be possible.</p>
 <h3 id="testing-the-login">Testing the login</h3>
 <p>To log in to the web UI, visit the website - in this case http://localhost:8200 - select &lsquo;OIDC&rsquo; as the login method and type &lsquo;oidc&rsquo; as the role, then click on &lsquo;Sign in with OIDC Provider&rsquo;.</p>
 
@@ -465,7 +465,7 @@
 <h2 id="map-the-app-roles-to-external-groups">Map the App Roles to external groups</h2>
 <p>Now that the login is successful, we need to assign permissions in Vault based on the received App Roles. To do this, we must use the concept of identity groups in Vault. Read the <a href="https://learn.hashicorp.com/vault/identity-access-management/iam-identity">documentation</a> on them to learn more.</p>
 <p>As the group information comes from Azure AD, we must use external groups and assign them aliases pointing to the roles in Azure AD. This must be done for any App Role we want to assign permissions to. In this case, these are the &lsquo;VaultUser&rsquo; and &lsquo;VaultAdmin&rsquo; roles.</p>
-<p>To create the external groups, we'll use the <a href="https://www.terraform.io/docs/providers/vault/r/identity_group.html"><code>vault_identity_group</code></a> resource. The groups will be named &lsquo;user&rsquo; and &lsquo;admin&rsquo;.</p>
+<p>To create the external groups, we'll use the <a href="https://www.terraform.io/docs/providers/vault/r/identity_group.html"><code>vault_identity_group</code></a> resource. The groups will be named &lsquo;user&rsquo; and &lsquo;admin&rsquo;. Add the below config to the main.tf file.</p>
 <div class="highlight"><pre class="chroma"><code class="language-hcl" data-lang="hcl"><span class="c1"># main.tf
 </span><span class="c1"></span><span class="k">resource</span> <span class="s2">&#34;vault_identity_group&#34; &#34;user&#34;</span> {
 <span class="n">  name</span>     <span class="o">=</span> <span class="s2">&#34;user&#34;</span>
@@ -478,7 +478,8 @@
 <span class="n">  type</span>     <span class="o">=</span> <span class="s2">&#34;external&#34;</span>
 <span class="hl"><span class="n">  policies</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;admin&#34;</span><span class="p">]</span>
 </span>}</code></pre></div>
-<p>After applying the above configuration, we now have two external groups in Vault. Each assign their highlighted policies to anyone or any group that is a member of the external group. To couple our OIDC roles to the external groups, we need to create aliases telling Vault that the OIDC roles received in the token, are part of specific external groups. Use the <a href="https://www.terraform.io/docs/providers/vault/r/identity_group_alias.html"><code>vault_identity_group_alias</code></a> resource to accomplish this.</p>
+<p>We previously logged in with the user &lsquo;Isidore&rsquo;. This account won't allow for configuration of Vault. We first need to switch to the root user with the <code>vault login</code> command before applying the configuration.</p>
+<p>After applying the above config, we now have two external groups in Vault. Each assign their highlighted policies to anyone or any group that is a member of the external group. To couple our OIDC roles to the external groups, we need to create aliases telling Vault that the OIDC roles received in the token, are part of specific external groups. Use the <a href="https://www.terraform.io/docs/providers/vault/r/identity_group_alias.html"><code>vault_identity_group_alias</code></a> resource to accomplish this.</p>
 <div class="highlight"><pre class="chroma"><code class="language-hcl" data-lang="hcl"><span class="c1"># main.tf
 </span><span class="c1"></span><span class="k">resource</span> <span class="s2">&#34;vault_identity_group_alias&#34; &#34;user_alias_azure_vault_user&#34;</span> {
 <span class="n">  name</span>           <span class="o">=</span> <span class="s2">&#34;VaultUser&#34;</span>
@@ -491,7 +492,7 @@
 <span class="n">  mount_accessor</span> <span class="o">=</span> <span class="k">vault_jwt_auth_backend</span><span class="p">.</span><span class="k">azure_oidc</span><span class="p">.</span><span class="k">accessor</span>
 <span class="n">  canonical_id</span>   <span class="o">=</span> <span class="k">vault_identity_group</span><span class="p">.</span><span class="k">admin</span><span class="p">.</span><span class="k">id</span>
 }
-</code></pre></div><p>After applying the configuration via Terraform, we can now try to log in with the user Isidore.</p>
+</code></pre></div><p>Add the above config to the .tf file and apply the configuration with <code>terraform apply</code>. Once done, we can try to log in with the user &lsquo;Isidore&rsquo;.</p>
 <div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="err">❯</span> <span class="n">vault</span> <span class="n">login</span> <span class="n">-method</span> <span class="n">oidc</span> <span class="n">role</span><span class="p">=</span><span class="n">oidc</span>
 <span class="p">[</span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="p">]</span>
 <span class="n">Key</span>                  <span class="n">Value</span>
@@ -514,6 +515,7 @@
 
 <span class="hl"><span class="n">  default_role</span> <span class="o">=</span> <span class="s2">&#34;oidc&#34;</span>
 </span>}</code></pre></div>
+<p>Switch to the root user before applying the configuration.</p>
 <p>This will save some typing on both the web UI and the CLI. To log in via the CLI, omit the role key to use the default role:</p>
 <div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">vault</span> <span class="n">login</span> <span class="n">-method</span> <span class="n">oidc</span>
 </code></pre></div><p>The examples in this post focused solely on the authentication. The policy definitions are one of the missing pieces. Another is the TTL adjustments to the Vault token lifetimes. A more complete example containing some of the missing pieces can be found in my GitHub <a href="https://github.com/draggeta/blog/tree/master/content/posts/2020/azure-ad-oidc-auth-in-hashicorp-vault-using-terraform/code">here</a>.</p>
@@ -689,7 +691,7 @@
         
         <p class="credits theme-by text-muted">
           <a href="https://gohugo.io">Hugo v0.62.2</a> powered &nbsp;&bull;&nbsp; Theme <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a> adapted from <a href="https://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a>
-          &nbsp;&bull;&nbsp;[<a href="https://github.com/draggeta/blog/tree/ddf58ec3d45f5a6fa128d8b7239ded8383699edc">ddf58ec3</a>]
+          &nbsp;&bull;&nbsp;[<a href="https://github.com/draggeta/blog/tree/1460e433b62a2f17dc325047c6905f9f1ca8e9b9">1460e433</a>]
         </p>
       </div>
     </div>

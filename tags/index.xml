@@ -8,7 +8,7 @@
     <managingEditor>stronglybranched@outlook.com (Tony Fortes Ramos)</managingEditor>
     <webMaster>stronglybranched@outlook.com (Tony Fortes Ramos)</webMaster>
     <copyright>©2019</copyright>
-    <lastBuildDate>Sun, 07 Jun 2020 22:15:00 +0200</lastBuildDate>
+    <lastBuildDate>Mon, 08 Jun 2020 14:15:00 +0200</lastBuildDate>
     
 	<atom:link href="https://stronglybranched.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -16,7 +16,7 @@
     <item>
       <title>app roles</title>
       <link>https://stronglybranched.io/tags/app-roles/</link>
-      <pubDate>Sun, 07 Jun 2020 22:15:00 +0200</pubDate>
+      <pubDate>Mon, 08 Jun 2020 14:15:00 +0200</pubDate>
       <author>stronglybranched@outlook.com (Tony Fortes Ramos)</author>
       <guid>https://stronglybranched.io/tags/app-roles/</guid>
       <description></description>
@@ -25,7 +25,7 @@
     <item>
       <title>azure ad</title>
       <link>https://stronglybranched.io/tags/azure-ad/</link>
-      <pubDate>Sun, 07 Jun 2020 22:15:00 +0200</pubDate>
+      <pubDate>Mon, 08 Jun 2020 14:15:00 +0200</pubDate>
       <author>stronglybranched@outlook.com (Tony Fortes Ramos)</author>
       <guid>https://stronglybranched.io/tags/azure-ad/</guid>
       <description></description>
@@ -34,7 +34,7 @@
     <item>
       <title>hashicorp</title>
       <link>https://stronglybranched.io/tags/hashicorp/</link>
-      <pubDate>Sun, 07 Jun 2020 22:15:00 +0200</pubDate>
+      <pubDate>Mon, 08 Jun 2020 14:15:00 +0200</pubDate>
       <author>stronglybranched@outlook.com (Tony Fortes Ramos)</author>
       <guid>https://stronglybranched.io/tags/hashicorp/</guid>
       <description></description>
@@ -43,7 +43,7 @@
     <item>
       <title>oidc</title>
       <link>https://stronglybranched.io/tags/oidc/</link>
-      <pubDate>Sun, 07 Jun 2020 22:15:00 +0200</pubDate>
+      <pubDate>Mon, 08 Jun 2020 14:15:00 +0200</pubDate>
       <author>stronglybranched@outlook.com (Tony Fortes Ramos)</author>
       <guid>https://stronglybranched.io/tags/oidc/</guid>
       <description></description>
@@ -52,7 +52,7 @@
     <item>
       <title>terraform</title>
       <link>https://stronglybranched.io/tags/terraform/</link>
-      <pubDate>Sun, 07 Jun 2020 22:15:00 +0200</pubDate>
+      <pubDate>Mon, 08 Jun 2020 14:15:00 +0200</pubDate>
       <author>stronglybranched@outlook.com (Tony Fortes Ramos)</author>
       <guid>https://stronglybranched.io/tags/terraform/</guid>
       <description></description>
@@ -61,7 +61,7 @@
     <item>
       <title>vault</title>
       <link>https://stronglybranched.io/tags/vault/</link>
-      <pubDate>Sun, 07 Jun 2020 22:15:00 +0200</pubDate>
+      <pubDate>Mon, 08 Jun 2020 14:15:00 +0200</pubDate>
       <author>stronglybranched@outlook.com (Tony Fortes Ramos)</author>
       <guid>https://stronglybranched.io/tags/vault/</guid>
       <description></description>

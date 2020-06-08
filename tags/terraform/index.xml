@@ -8,7 +8,7 @@
     <managingEditor>stronglybranched@outlook.com (Tony Fortes Ramos)</managingEditor>
     <webMaster>stronglybranched@outlook.com (Tony Fortes Ramos)</webMaster>
     <copyright>©2019</copyright>
-    <lastBuildDate>Sun, 07 Jun 2020 22:15:00 +0200</lastBuildDate>
+    <lastBuildDate>Mon, 08 Jun 2020 14:15:00 +0200</lastBuildDate>
     
 	<atom:link href="https://stronglybranched.io/tags/terraform/index.xml" rel="self" type="application/rss+xml" />
     
@@ -16,7 +16,7 @@
     <item>
       <title>Azure AD OIDC auth in HashiCorp Vault using Terraform</title>
       <link>https://stronglybranched.io/2020/06/azure-ad-oidc-auth-in-hashicorp-vault-using-terraform/</link>
-      <pubDate>Sun, 07 Jun 2020 22:15:00 +0200</pubDate>
+      <pubDate>Mon, 08 Jun 2020 14:15:00 +0200</pubDate>
       <author>stronglybranched@outlook.com (Tony Fortes Ramos)</author>
       <guid>https://stronglybranched.io/2020/06/azure-ad-oidc-auth-in-hashicorp-vault-using-terraform/</guid>
       <description>HashiCorp Vault ©HashiCorp
