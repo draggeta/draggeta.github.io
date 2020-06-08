@@ -59,7 +59,7 @@
   "headline": "Azure AD OIDC auth in HashiCorp Vault using Terraform",
   "description" : "HashiCorp Vault ©HashiCorp\n   I recently had to set up a HashiCorp Vault server for a client. Due to the requirements, I got to do some new things with regards to Vault authentication. Some of the stated requirements were:\n Authentication to Vault should be done by using Azure Active Directory Use of Azure AD Application Roles for permissions instead of groups Configure Vault via Terraform  While I\x27ve done quite a bit with Vault and OAuth 2.",
   "inLanguage" : "en",
-  "wordCount":  1902 ,
+  "wordCount":  1931 ,
   "datePublished" : "2020-06-08T14:15:00",
   "dateModified" : "2020-06-08T14:15:00",
   "image" : "https:\/\/stronglybranched.io\/img\/avatar-icon.svg",
@@ -257,10 +257,10 @@
   <i class="fas fa-calendar"></i>&nbsp;Posted on Jun 8, 2020
   
   
-    &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;9&nbsp;minutes
+    &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;10&nbsp;minutes
   
   
-    &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;1902&nbsp;words
+    &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;1931&nbsp;words
   
   
     
@@ -307,6 +307,7 @@
 </ol>
 <p>While I've done quite a bit with Vault and <a href="https://oauth.net/2/">OAuth 2.0</a>/<a href="https://openid.net/connect/">OpenID Connect</a>, I've never had to use OIDC as an authenticatio backend in Vault. The few setups I've done before all used LDAP as their external authentication source.</p>
 <p>Thankfully, the <a href="https://www.vaultproject.io/docs/auth/jwt_oidc_providers#azure-active-directory-aad">documentation</a> for setting up Azure AD authentication is quite clear. It describes all the steps to take. This post makes use of the information, but adapts it to the requirements and uses Terraform to apply the configuration to Vault.</p>
+<p>This post assumes that the reader has some knowledge of Terraform, Azure AD and Vault. I won't be detailing how to set them up or work with these tools.</p>
 <h2 id="start-the-vault-server">Start the Vault Server</h2>
 <p>Let's start with the easy part: starting a development Vault server. If you don't know how to install Vault, there is a <a href="https://learn.hashicorp.com/vault/getting-started/install">guide</a> on the Vault site.</p>
 <p>Before starting the server, we're going set some variables. Create a GUID to serve as the root token. The token gives you root permission in Vault. Set the <code>VAULT_ADDR</code> environment variable to <code>http://127.0.0.1:8200</code>. This environment variable tells the client where to reach the running Vault server. As some troubleshooting may be required, the log level is set to debug.</p>
@@ -693,7 +694,7 @@
         
         <p class="credits theme-by text-muted">
           <a href="https://gohugo.io">Hugo v0.62.2</a> powered &nbsp;&bull;&nbsp; Theme <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a> adapted from <a href="https://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a>
-          &nbsp;&bull;&nbsp;[<a href="https://github.com/draggeta/blog/tree/1460e433b62a2f17dc325047c6905f9f1ca8e9b9">1460e433</a>]
+          &nbsp;&bull;&nbsp;[<a href="https://github.com/draggeta/blog/tree/776d76845f0bfaa9456a2de66791fc674beb91b3">776d7684</a>]
         </p>
       </div>
     </div>
